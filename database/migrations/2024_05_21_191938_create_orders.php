@@ -30,6 +30,10 @@ return new class extends Migration
             $table->decimal('hip', 8, 2);
             $table->decimal('skirt_length', 8, 2);
             $table->enum('unit_length', ['cm', 'inch'])->default('inch');
+
+
+            $table->unsignedBigInteger('client_id');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
         });
     }
 
@@ -40,6 +44,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropForeign(['client_id']);
+            $table->dropColumn('client_id');
+        });
         Schema::dropIfExists('orders');
     }
 };

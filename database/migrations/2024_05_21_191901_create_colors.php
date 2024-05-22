@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('color_name');
             $table->string('color_code');
             $table->boolean('status')->default(true);
+            $table->timestamps();
+
+            $table->unsignedBigInteger('texture_id');
+            $table->foreign('texture_id')->references('id')->on('textures')->onDelete('cascade');
         });
     }
 
@@ -29,6 +32,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('colors', function (Blueprint $table) {
+            $table->dropForeign(['texture_id']);
+            $table->dropColumn('texture_id');
+        });
         Schema::dropIfExists('colors');
     }
 };

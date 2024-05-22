@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('order_details', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->string('description');
-            $table->unsignedBigInteger('price_unit');
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('role', ['admin', 'client'])->default('client');
         });
     }
 
@@ -28,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_details');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
+        });
     }
 };

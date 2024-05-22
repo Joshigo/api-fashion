@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('status')->default(true);
             $table->timestamps();
+
+            $table->unsignedBigInteger('piece_id');
+            $table->foreign('piece_id')->references('id')->on('pieces')->onDelete('cascade');
         });
     }
 
@@ -28,6 +31,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('textures', function (Blueprint $table) {
+            $table->dropForeign(['piece_id']);
+            $table->dropColumn('piece_id');
+        });
         Schema::dropIfExists('textures');
     }
 };
