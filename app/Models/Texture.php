@@ -19,4 +19,9 @@ class Texture extends Model
     {
         return $this->belongsTo(Piece::class);
     }
+    
+    public function colors()
+    {
+        return $this->hasMany(Color::class);
+    }
 }

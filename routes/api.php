@@ -30,6 +30,7 @@ Route::apiResource('categories', CategoryController::class);
 Route::apiResource('pieces', PieceController::class);
 Route::apiResource('textures', TextureController::class);
 Route::apiResource('colors', ColorController::class);
+Route::get('pieces/{id}/details', [PieceController::class, 'showWithRelations']);
 Route::apiResource('orderdetails', OrderDetailController::class);
 
 Route::post('/register', [AuthController::class, 'registro']);
