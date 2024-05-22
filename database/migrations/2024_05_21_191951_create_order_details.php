@@ -17,8 +17,6 @@ return new class extends Migration {
             $table->timestamps();
             $table->string('description');
             $table->decimal('price_unit', 10, 2);
-            $table->unsignedBigInteger('order_id');
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->string('piece_id');
             $table->string('piece_type');
             $table->string('piece_name');
@@ -31,6 +29,9 @@ return new class extends Migration {
             $table->string('color_id');
             $table->string('color_name');
             $table->string('color_code');
+
+            // $table->unsignedBigInteger('order_id');
+            // $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }
 

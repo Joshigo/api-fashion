@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderDetailController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,7 @@ Route::apiResource('categories', CategoryController::class);
 Route::apiResource('pieces', PieceController::class);
 Route::apiResource('textures', TextureController::class);
 Route::apiResource('colors', ColorController::class);
+Route::apiResource('orderdetails', OrderDetailController::class);
 
 Route::post('/register', [AuthController::class, 'registro']);
 Route::post('/login', [AuthController::class, 'login']);
