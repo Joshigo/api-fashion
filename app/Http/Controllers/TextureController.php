@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Piece;
+use App\Models\Texture;
 use Illuminate\Support\Facades\Validator;
 
-class PieceController extends Controller
+class TextureController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class PieceController extends Controller
      */
     public function index()
     {
-        $pieces = Piece::where('status', true)->with('category')->get();
-        return response()->json($pieces);
+        $textures = Texture::where('status', true)->with('piece')->get();
+        return response()->json($textures);
     }
 
     /**
@@ -28,20 +28,17 @@ class PieceController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'color' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
             'status' => 'required|boolean',
-            'category_id' => 'required|exists:categories,id',
+            'piece_id' => 'required|exists:pieces,id',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $piece = Piece::create($request->all());
-        return response()->json($piece, 201);
+        $texture = Texture::create($request->all());
+        return response()->json($texture, 201);
     }
 
     /**
@@ -52,11 +49,11 @@ class PieceController extends Controller
      */
     public function show($id)
     {
-        $piece = Piece::find($id);
-        if (is_null($piece)) {
-            return response()->json(['message' => 'Piece not found'], 404);
+        $texture = Texture::find($id);
+        if (is_null($texture)) {
+            return response()->json(['message' => 'Texture not found'], 404);
         }
-        return response()->json($piece);
+        return response()->json($texture);
     }
 
     /**
@@ -69,25 +66,22 @@ class PieceController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'color' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
             'status' => 'required|boolean',
-            'category_id' => 'required|exists:categories,id',
+            'piece_id' => 'required|exists:pieces,id',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $piece = Piece::find($id);
-        if (is_null($piece)) {
-            return response()->json(['message' => 'Piece not found'], 404);
+        $texture = Texture::find($id);
+        if (is_null($texture)) {
+            return response()->json(['message' => 'Texture not found'], 404);
         }
 
-        $piece->update($request->all());
-        return response()->json($piece);
+        $texture->update($request->all());
+        return response()->json($texture);
     }
 
     /**
@@ -98,12 +92,12 @@ class PieceController extends Controller
      */
     public function destroy($id)
     {
-        $piece = Piece::find($id);
-        if (is_null($piece)) {
-            return response()->json(['message' => 'Piece not found'], 404);
+        $texture = Texture::find($id);
+        if (is_null($texture)) {
+            return response()->json(['message' => 'Texture not found'], 404);
         }
 
-        $piece->delete();
+        $texture->delete();
         return response()->json(null, 204);
     }
 }

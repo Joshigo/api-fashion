@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Piece;
+use App\Models\Color;
 use Illuminate\Support\Facades\Validator;
 
-class PieceController extends Controller
+class ColorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class PieceController extends Controller
      */
     public function index()
     {
-        $pieces = Piece::where('status', true)->with('category')->get();
-        return response()->json($pieces);
+        $colors = Color::where('status', true)->with('texture')->get();
+        return response()->json($colors);
     }
 
     /**
@@ -28,20 +28,18 @@ class PieceController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'color' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
+            'color_name' => 'required|string|max:255',
+            'color_code' => 'required|string|max:255',
             'status' => 'required|boolean',
-            'category_id' => 'required|exists:categories,id',
+            'texture_id' => 'required|exists:textures,id',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $piece = Piece::create($request->all());
-        return response()->json($piece, 201);
+        $color = Color::create($request->all());
+        return response()->json($color, 201);
     }
 
     /**
@@ -52,11 +50,11 @@ class PieceController extends Controller
      */
     public function show($id)
     {
-        $piece = Piece::find($id);
-        if (is_null($piece)) {
-            return response()->json(['message' => 'Piece not found'], 404);
+        $color = Color::find($id);
+        if (is_null($color)) {
+            return response()->json(['message' => 'Color not found'], 404);
         }
-        return response()->json($piece);
+        return response()->json($color);
     }
 
     /**
@@ -69,25 +67,23 @@ class PieceController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'color' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
+            'color_name' => 'required|string|max:255',
+            'color_code' => 'required|string|max:255',
             'status' => 'required|boolean',
-            'category_id' => 'required|exists:categories,id',
+            'texture_id' => 'required|exists:textures,id',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $piece = Piece::find($id);
-        if (is_null($piece)) {
-            return response()->json(['message' => 'Piece not found'], 404);
+        $color = Color::find($id);
+        if (is_null($color)) {
+            return response()->json(['message' => 'Color not found'], 404);
         }
 
-        $piece->update($request->all());
-        return response()->json($piece);
+        $color->update($request->all());
+        return response()->json($color);
     }
 
     /**
@@ -98,12 +94,12 @@ class PieceController extends Controller
      */
     public function destroy($id)
     {
-        $piece = Piece::find($id);
-        if (is_null($piece)) {
-            return response()->json(['message' => 'Piece not found'], 404);
+        $color = Color::find($id);
+        if (is_null($color)) {
+            return response()->json(['message' => 'Color not found'], 404);
         }
 
-        $piece->delete();
+        $color->delete();
         return response()->json(null, 204);
     }
 }
