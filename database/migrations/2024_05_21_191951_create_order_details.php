@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -21,6 +20,22 @@ return new class extends Migration
 
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+
+            $table->string('piece_id');
+            $table->string('piece_type');
+            $table->string('piece_name');
+            $table->decimal('piece_price', 10, 2);
+
+            $table->string('category_id');
+            $table->string('category_name');
+
+            $table->string('texture_id');
+            $table->string('texture_name');
+            $table->string('texture_provider');
+
+            $table->string('color_id');
+            $table->string('color_name');
+            $table->string('color_code');
         });
     }
 
