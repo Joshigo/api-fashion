@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('color');
             $table->string('type');
             $table->string('name');
-            $table->unsignedBigInteger('price');
+            $table->decimal('price', 10, 2);
+            $table->boolean('status')->default(true);
             $table->timestamps();
 
             $table->unsignedBigInteger('category_id');
