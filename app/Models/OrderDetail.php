@@ -26,4 +26,6 @@ class OrderDetail extends Model
         "color_name",
         "color_code",
     ];
+
+
 }

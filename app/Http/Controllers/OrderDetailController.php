@@ -13,9 +13,9 @@ class OrderDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $detail = OrderDetail::orderBy("id","desc")->paginate(10);
+        // $details = OrderDetail::orderBy("id","desc")->paginate(10);
         $details = OrderDetail::all();
         return response()->json($details);
     }
@@ -38,13 +38,27 @@ class OrderDetailController extends Controller
      */
     public function store(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
 
-        // ]);
-
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string|max:255',
+            'price_unit' => 'required|numeric|min:0',
+            'piece_type' => 'required|string|max:255',
+            'piece_name' => 'required|string|max:255',
+            'price_price' => 'required|numeric|min:0',
+            'category_id' => 'required|string|max:255',
+            'texture_id' => 'required|string|max:255',
+            'texture_name' => 'required|string|max:255',
+            'texture_provider' => 'required|string|max:255',
+            'color_id' => 'required|string|max:255',
+            'color_name' => 'required|string|max:255',
+            'color_code' => 'required|string|max:255',
+            'order_id' => 'required|exists:orders,id',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
         $details = OrderDetail::create($request->all());
-        return response()->json($details, 201);
-
+        return response()->json($details,201);
     }
 
     /**
@@ -81,7 +95,33 @@ class OrderDetailController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string|max:255',
+            'price_unit' => 'required|numeric|min:0',
+            'piece_type' => 'required|string|max:255',
+            'piece_name' => 'required|string|max:255',
+            'price_price' => 'required|numeric|min:0',
+            'category_id' => 'required|string|max:255',
+            'texture_id' => 'required|string|max:255',
+            'texture_name' => 'required|string|max:255',
+            'texture_provider' => 'required|string|max:255',
+            'color_id' => 'required|string|max:255',
+            'color_name' => 'required|string|max:255',
+            'color_code' => 'required|string|max:255',
+            'order_id' => 'required|exists:orders,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $detail = OrderDetail::find($id);
+        if(is_null($detail)) {
+            return response()->json(['message'=> 'detail not found'],404);
+        }
+
+        $detail->update($request->all());
+        return response()->json($detail);
     }
 
     /**
@@ -92,6 +132,11 @@ class OrderDetailController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $detail = OrderDetail::find($id);
+        if(is_null($detail)) {
+            return response()->json(['message'=> 'detail not found'],404);
+        }
+        $detail->delete();
+        return response()->json(null,204);
     }
 }
