@@ -13,9 +13,13 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::where('status', true)->get();
+        if ($request->has('status')) {
+            $categories = Category::where('status', true)->get();
+        } else {
+            $categories = Category::all();
+        }
         return response()->json($categories);
     }
 

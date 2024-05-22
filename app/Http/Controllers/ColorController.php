@@ -13,11 +13,17 @@ class ColorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $colors = Color::where('status', true)->with('texture')->get();
+        if ($request->has('status')) {
+            $colors = Color::where('status', true)->with('texture')->get();
+        } else {
+            $colors = Color::with('texture')->get();
+        }
+    
         return response()->json($colors);
     }
+    
 
     /**
      * Store a newly created resource in storage.

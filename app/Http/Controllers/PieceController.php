@@ -13,12 +13,17 @@ class PieceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pieces = Piece::where('status', true)->with('category')->get();
+        if ($request->has('status')) {
+            $pieces = Piece::where('status', true)->with('category')->get();
+        } else {
+            $pieces = Piece::with('category')->get();
+        }
+    
         return response()->json($pieces);
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -56,6 +61,17 @@ class PieceController extends Controller
         if (is_null($piece)) {
             return response()->json(['message' => 'Piece not found'], 404);
         }
+        return response()->json($piece);
+    }
+
+    public function showWithRelations($id)
+    {
+        $piece = Piece::with(['category', 'textures.colors'])->find($id);
+
+        if (is_null($piece)) {
+            return response()->json(['message' => 'Piece not found'], 404);
+        }
+
         return response()->json($piece);
     }
 

@@ -13,11 +13,17 @@ class TextureController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $textures = Texture::where('status', true)->with('piece')->get();
+        if ($request->has('status')) {
+            $textures = Texture::where('status', true)->with('piece')->get();
+        } else {
+            $textures = Texture::with('piece')->get();
+        }
+    
         return response()->json($textures);
     }
+    
 
     /**
      * Store a newly created resource in storage.
