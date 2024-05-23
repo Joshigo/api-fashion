@@ -77,7 +77,7 @@ class OrderDetailController extends Controller
             'hip' => 'numeric|min:0',
             'skirt_length' => 'numeric|min:0',
             'unit_length' => 'required|in:cm,inch',
-            'user_id' => 'required|exists:users,id',
+            // 'user_id' => 'required|exists:users,id',
         ]);
     
         if ($orderValidator->fails()) {
