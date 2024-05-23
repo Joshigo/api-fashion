@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\OrderDetail;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class OrderDetailController extends Controller
 {
@@ -30,6 +32,36 @@ class OrderDetailController extends Controller
      */
     public function store(Request $request)
     {
+        // Validar y crear o asignar el usuario
+        $userValidator = Validator::make($request->user, [
+            'name' => 'required|string|max:255',
+            'last_name' => 'string|max:255',
+            'email' => 'required|string|email|max:255',
+            'phone' => 'required|string|max:15',
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+        ]);
+    
+        if ($userValidator->fails()) {
+            return response()->json($userValidator->errors(), 422);
+        }
+    
+        $user = User::where('email', $request->user['email'])->first();
+    
+        if (!$user) {
+            $password = $request->user['password'] ?? Str::random(10);
+            $user = new User([
+                'name' => $request->user['name'],
+                'last_name' => $request->user['last_name'],
+                'email' => $request->user['email'],
+                'password' => bcrypt($password),
+                'phone' => $request->user['phone'],
+                'country' => $request->user['country'],
+                'city' => $request->user['city'],
+            ]);
+            $user->save();
+        }
+    
         // Validar la orden
         $orderValidator = Validator::make($request->order, [
             'status' => 'boolean',
@@ -53,7 +85,6 @@ class OrderDetailController extends Controller
         }
     
         // Crear la orden
-        $user = Auth::guard('sanctum')->user();
         $order = Order::create(array_merge($request->order, ['user_id' => $user->id]));
     
         // Validar los detalles de la orden
@@ -89,8 +120,7 @@ class OrderDetailController extends Controller
     
         return response()->json(['order' => $order, 'order_details' => $orderDetails], 201);
     }
-    
-    
+        
 
     /**
      * Display the specified resource.
