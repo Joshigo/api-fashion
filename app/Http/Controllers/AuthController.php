@@ -20,6 +20,7 @@ class AuthController extends Controller
             'phone' => 'required|string|max:15',
             'country' => 'required|string|max:255',
             'city' => 'required|string|max:255',
+            'role' => 'required|in:client,admin',
         ]);
 
         if ($validator->fails()) {

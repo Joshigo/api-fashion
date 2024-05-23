@@ -3,9 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderDetailController;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PieceController;
 use App\Http\Controllers\TextureController;
