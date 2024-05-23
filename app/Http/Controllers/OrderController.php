@@ -29,7 +29,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'status' => 'required|boolean',
+            'status' => 'boolean',
             'neck' => 'numeric|min:0',
             'shoulder' => 'numeric|min:0',
             'arm' => 'numeric|min:0',

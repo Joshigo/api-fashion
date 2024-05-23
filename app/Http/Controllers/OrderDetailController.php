@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\OrderDetail;
+use App\Models\Order;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class OrderDetailController extends Controller
 {
@@ -28,31 +30,67 @@ class OrderDetailController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'description' => 'required|string|max:255',
-            'price_unit' => 'required|numeric|min:0',
-            'piece_id' => 'required|string|max:255',
-            'piece_type' => 'required|string|max:255',
-            'piece_name' => 'required|string|max:255',
-            'piece_price' => 'required|numeric|min:0',
-            'category_id' => 'required|string|max:255',
-            'category_name' => 'required|string|max:255',
-            'texture_id' => 'required|string|max:255',
-            'texture_name' => 'required|string|max:255',
-            'texture_provider' => 'required|string|max:255',
-            'color_id' => 'required|string|max:255',
-            'color_name' => 'required|string|max:255',
-            'color_code' => 'required|string|max:255',
-            'order_id' => 'required|exists:orders,id',
+        // Validar la orden
+        $orderValidator = Validator::make($request->order, [
+            'status' => 'boolean',
+            'neck' => 'numeric|min:0',
+            'shoulder' => 'numeric|min:0',
+            'arm' => 'numeric|min:0',
+            'mid_front' => 'numeric|min:0',
+            'bicep' => 'numeric|min:0',
+            'bust' => 'numeric|min:0',
+            'size' => 'numeric|min:0',
+            'waist' => 'numeric|min:0',
+            'leg' => 'numeric|min:0',
+            'hip' => 'numeric|min:0',
+            'skirt_length' => 'numeric|min:0',
+            'unit_length' => 'required|in:cm,inch',
+            'user_id' => 'required|exists:users,id',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+    
+        if ($orderValidator->fails()) {
+            return response()->json($orderValidator->errors(), 422);
         }
-
-        $orderDetail = OrderDetail::create($request->all());
-        return response()->json($orderDetail, 201);
+    
+        // Crear la orden
+        $user = Auth::guard('sanctum')->user();
+        $order = Order::create(array_merge($request->order, ['user_id' => $user->id]));
+    
+        // Validar los detalles de la orden
+        $detailsValidator = Validator::make($request->all(), [
+            'order_details' => 'required|array',
+            'order_details.*.description' => 'required|string|max:255',
+            'order_details.*.price_unit' => 'required|numeric|min:0',
+            'order_details.*.piece_id' => 'required|string|max:255',
+            'order_details.*.piece_type' => 'required|string|max:255',
+            'order_details.*.piece_name' => 'required|string|max:255',
+            'order_details.*.piece_price' => 'required|numeric|min:0',
+            'order_details.*.category_id' => 'required|string|max:255',
+            'order_details.*.category_name' => 'required|string|max:255',
+            'order_details.*.texture_id' => 'required|string|max:255',
+            'order_details.*.texture_name' => 'required|string|max:255',
+            'order_details.*.texture_provider' => 'required|string|max:255',
+            'order_details.*.color_id' => 'required|string|max:255',
+            'order_details.*.color_name' => 'required|string|max:255',
+            'order_details.*.color_code' => 'required|string|max:255',
+            'order_details.*.order_id' => 'required|exists:orders,id',
+        ]);
+    
+        if ($detailsValidator->fails()) {
+            return response()->json($detailsValidator->errors(), 422);
+        }
+    
+        // Crear los detalles de la orden
+        $orderDetails = [];
+        foreach ($request->order_details as $detail) {
+            $detail['order_id'] = $order->id;
+            $orderDetails[] = OrderDetail::create($detail);
+        }
+    
+        return response()->json(['order' => $order, 'order_details' => $orderDetails], 201);
     }
+    
+    
 
     /**
      * Display the specified resource.
@@ -78,35 +116,36 @@ class OrderDetailController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'description' => 'required|string|max:255',
-            'price_unit' => 'required|numeric|min:0',
-            'piece_id' => 'required|string|max:255',
-            'piece_type' => 'required|string|max:255',
-            'piece_name' => 'required|string|max:255',
-            'piece_price' => 'required|numeric|min:0',
-            'category_id' => 'required|string|max:255',
-            'category_name' => 'required|string|max:255',
-            'texture_id' => 'required|string|max:255',
-            'texture_name' => 'required|string|max:255',
-            'texture_provider' => 'required|string|max:255',
-            'color_id' => 'required|string|max:255',
-            'color_name' => 'required|string|max:255',
-            'color_code' => 'required|string|max:255',
-            'order_id' => 'required|exists:orders,id',
-        ]);
+        // return response()->json({});
+        // $validator = Validator::make($request->all(), [
+        //     'description' => 'required|string|max:255',
+        //     'price_unit' => 'required|numeric|min:0',
+        //     'piece_id' => 'required|string|max:255',
+        //     'piece_type' => 'required|string|max:255',
+        //     'piece_name' => 'required|string|max:255',
+        //     'piece_price' => 'required|numeric|min:0',
+        //     'category_id' => 'required|string|max:255',
+        //     'category_name' => 'required|string|max:255',
+        //     'texture_id' => 'required|string|max:255',
+        //     'texture_name' => 'required|string|max:255',
+        //     'texture_provider' => 'required|string|max:255',
+        //     'color_id' => 'required|string|max:255',
+        //     'color_name' => 'required|string|max:255',
+        //     'color_code' => 'required|string|max:255',
+        //     'order_id' => 'required|exists:orders,id',
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json($validator->errors(), 422);
+        // }
 
-        $orderDetail = OrderDetail::find($id);
-        if (is_null($orderDetail)) {
-            return response()->json(['message' => 'Order detail not found'], 404);
-        }
+        // $orderDetail = OrderDetail::find($id);
+        // if (is_null($orderDetail)) {
+        //     return response()->json(['message' => 'Order detail not found'], 404);
+        // }
 
-        $orderDetail->update($request->all());
-        return response()->json($orderDetail);
+        // $orderDetail->update($request->all());
+        // return response()->json($orderDetail);
     }
 
     /**
