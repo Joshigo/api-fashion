@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PieceController;
 use App\Http\Controllers\TextureController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,8 @@ Route::apiResource('pieces', PieceController::class);
 Route::apiResource('textures', TextureController::class);
 Route::apiResource('colors', ColorController::class);
 Route::get('pieces/{id}/details', [PieceController::class, 'showWithRelations']);
-Route::apiResource('orderdetails', OrderDetailController::class);
+Route::apiResource('order-details', OrderDetailController::class);
+Route::apiResource('orders', OrderController::class);
 
 Route::post('/register', [AuthController::class, 'registro']);
 Route::post('/login', [AuthController::class, 'login']);

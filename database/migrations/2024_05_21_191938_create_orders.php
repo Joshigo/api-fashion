@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->boolean('status')->default(true);
-            $table->decimal('neck', 8, 2); // Usar decimal para medidas numéricas
+            $table->decimal('neck', 8, 2);
             $table->decimal('shoulder', 8, 2);
             $table->decimal('arm', 8, 2);
             $table->decimal('mid_front', 8, 2);
@@ -31,9 +31,8 @@ return new class extends Migration
             $table->decimal('skirt_length', 8, 2);
             $table->enum('unit_length', ['cm', 'inch'])->default('inch');
 
-
-            $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

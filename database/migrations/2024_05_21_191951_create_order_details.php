@@ -30,8 +30,8 @@ return new class extends Migration {
             $table->string('color_name');
             $table->string('color_code');
 
-            // $table->unsignedBigInteger('order_id');
-            // $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }
 
