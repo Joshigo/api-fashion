@@ -22,7 +22,7 @@ class Piece extends Model
     {
         return $this->belongsTo(Category::class);
     }
-    
+
     public function textures()
     {
         return $this->hasMany(Texture::class);

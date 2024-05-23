@@ -16,7 +16,7 @@ class OrderDetailController extends Controller
     public function index()
     {
         // $details = OrderDetail::orderBy("id","desc")->paginate(10);
-        $orderDetails = OrderDetail::all();
+        $orderDetails = OrderDetail::with('orders')->get();
         return response()->json($orderDetails);
     }
 

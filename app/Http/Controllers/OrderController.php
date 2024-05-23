@@ -30,18 +30,20 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'status' => 'required|boolean',
-            'neck' => 'required|numeric|min:0',
-            'shoulder' => 'required|numeric|min:0',
-            'arm' => 'required|numeric|min:0',
-            'mid_front' => 'required|numeric|min:0',
-            'bicep' => 'required|numeric|min:0',
-            'bust' => 'required|numeric|min:0',
-            'size' => 'required|numeric|min:0',
-            'waist' => 'required|numeric|min:0',
-            'leg' => 'required|numeric|min:0',
-            'hip' => 'required|numeric|min:0',
-            'skirt_length' => 'required|numeric|min:0',
+            'neck' => 'numeric|min:0',
+            'shoulder' => 'numeric|min:0',
+            'arm' => 'numeric|min:0',
+            'mid_front' => 'numeric|min:0',
+            'bicep' => 'numeric|min:0',
+            'bust' => 'numeric|min:0',
+            'size' => 'numeric|min:0',
+            'waist' => 'numeric|min:0',
+            'leg' => 'numeric|min:0',
+            'hip' => 'numeric|min:0',
+            'skirt_length' => 'numeric|min:0',
             'unit_length' => 'required|in:cm,inch',
+            'user_id' => 'required|exists:users,id',
+
         ]);
 
         if ($validator->fails()) {
@@ -49,7 +51,6 @@ class OrderController extends Controller
         }
 
         $user = Auth::guard('sanctum')->user();
-        
         $order = Order::create(array_merge($request->all(), ['user_id' => $user->id]));
 
         return response()->json($order, 201);
@@ -81,17 +82,17 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'status' => 'required|boolean',
-            'neck' => 'required|numeric|min:0',
-            'shoulder' => 'required|numeric|min:0',
-            'arm' => 'required|numeric|min:0',
-            'mid_front' => 'required|numeric|min:0',
-            'bicep' => 'required|numeric|min:0',
-            'bust' => 'required|numeric|min:0',
-            'size' => 'required|numeric|min:0',
-            'waist' => 'required|numeric|min:0',
-            'leg' => 'required|numeric|min:0',
-            'hip' => 'required|numeric|min:0',
-            'skirt_length' => 'required|numeric|min:0',
+            'neck' => 'numeric|min:0',
+            'shoulder' => 'numeric|min:0',
+            'arm' => 'numeric|min:0',
+            'mid_front' => 'numeric|min:0',
+            'bicep' => 'numeric|min:0',
+            'bust' => 'numeric|min:0',
+            'size' => 'numeric|min:0',
+            'waist' => 'numeric|min:0',
+            'leg' => 'numeric|min:0',
+            'hip' => 'numeric|min:0',
+            'skirt_length' => 'numeric|min:0',
             'unit_length' => 'required|in:cm,inch',
             'user_id' => 'nullable|exists:users,id',
         ]);
