@@ -26,10 +26,22 @@ Route::middleware('auth:sanctum')->get('user', function (Request $request) {
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('pieces', PieceController::class);
-    Route::apiResource('textures', TextureController::class);
+    Route::group(['prefix' => 'pieces'], function () {
+        Route::get('/', [PieceController::class, 'index']);
+        Route::post('/', [PieceController::class, 'store']);
+        Route::get('/{piece}', [PieceController::class, 'show']);
+        Route::post('/{piece}', [PieceController::class, 'update']);
+        Route::delete('/{piece}', [PieceController::class, 'destroy']);
+        Route::get('/{id}/details', [PieceController::class, 'showWithRelations']);
+    });
+    Route::group(['prefix' => 'textures'], function () {
+        Route::get('/', [TextureController::class, 'index']);
+        Route::post('/', [TextureController::class, 'store']);
+        Route::get('/{texture}', [TextureController::class, 'show']);
+        Route::post('/{texture}', [TextureController::class, 'update']);
+        Route::delete('/{texture}', [TextureController::class, 'destroy']);
+    });
     Route::apiResource('colors', ColorController::class);
-    Route::get('pieces/{id}/details', [PieceController::class, 'showWithRelations']);
 });
 Route::apiResource('order-details', OrderDetailController::class);
 Route::apiResource('orders', OrderController::class);

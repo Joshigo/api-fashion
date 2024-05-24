@@ -20,7 +20,7 @@ class OrderDetail extends Model
         'category_name',
         'texture_id',
         'texture_name',
-        'texture_provider',
+        // 'texture_provider',
         'color_id',
         'color_name',
         'color_code',

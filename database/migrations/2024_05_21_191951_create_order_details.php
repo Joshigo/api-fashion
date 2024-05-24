@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->string('category_name');
             $table->string('texture_id');
             $table->string('texture_name');
-            $table->string('texture_provider');
+            // $table->string('texture_provider');
             $table->string('color_id');
             $table->string('color_name');
             $table->string('color_code');

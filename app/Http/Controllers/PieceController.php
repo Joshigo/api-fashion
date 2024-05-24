@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Piece;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class PieceController extends Controller
 {
@@ -39,13 +40,25 @@ class PieceController extends Controller
             'price' => 'required|numeric|min:0',
             'status' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
+            'file' => 'required|file|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $piece = Piece::create($request->all());
+        $piece = new Piece($request->all());
+        $piece->save();
+
+        $filePath = null;
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = 'piece-' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('pieces/' . $piece->id, $fileName, 'public');
+            $piece->file_path = $filePath;
+            $piece->save();
+        }
+
         return response()->json($piece, 201);
     }
 
@@ -91,6 +104,7 @@ class PieceController extends Controller
             'price' => 'required|numeric|min:0',
             'status' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
+            'file' => 'sometimes|file|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -102,7 +116,25 @@ class PieceController extends Controller
             return response()->json(['message' => 'Piece not found'], 404);
         }
 
-        $piece->update($request->all());
+        $filePath = $piece->file_path;
+
+        if ($request->hasFile('file')) {
+            // Delete the old file if it exists
+            if ($piece->file_path && Storage::disk('public')->exists($piece->file_path)) {
+                Storage::disk('public')->delete($piece->file_path);
+            }
+
+            // Store the new file
+            $file = $request->file('file');
+            $fileName = 'piece-' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('pieces/' . $piece->id, $fileName, 'public');
+        }
+
+        $piece->update(array_merge(
+            $request->except('file'),
+            ['file_path' => $filePath]
+        ));
+
         return response()->json($piece);
     }
 
@@ -117,6 +149,11 @@ class PieceController extends Controller
         $piece = Piece::find($id);
         if (is_null($piece)) {
             return response()->json(['message' => 'Piece not found'], 404);
+        }
+
+        // Delete the file if it exists
+        if ($piece->file_path && Storage::disk('public')->exists($piece->file_path)) {
+            Storage::disk('public')->delete($piece->file_path);
         }
 
         $piece->delete();

@@ -16,6 +16,7 @@ class Piece extends Model
         'price',
         'status',
         'category_id',
+        'file_path',
     ];
 
     public function category()
