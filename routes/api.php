@@ -20,16 +20,17 @@ use App\Http\Controllers\OrderController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('pieces', PieceController::class);
-Route::apiResource('textures', TextureController::class);
-Route::apiResource('colors', ColorController::class);
-Route::get('pieces/{id}/details', [PieceController::class, 'showWithRelations']);
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('pieces', PieceController::class);
+    Route::apiResource('textures', TextureController::class);
+    Route::apiResource('colors', ColorController::class);
+    Route::get('pieces/{id}/details', [PieceController::class, 'showWithRelations']);
+});
 Route::apiResource('order-details', OrderDetailController::class);
 Route::apiResource('orders', OrderController::class);
 

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -14,13 +15,12 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'last_name' => 'string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'phone' => 'required|string|max:15',
-            'country' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'role' => 'required|in:client,admin',
+            'phone' => 'string|max:15',
+            'country' => 'string|max:255',
+            'city' => 'string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -46,32 +46,28 @@ class AuthController extends Controller
     {
         $users = User::all();
     }
-    public function login(Request $request){
-
+    public function login(Request $request)
+    {
         $validator = Validator::make($request->all(),[
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('Personal Access Token')->plainTextToken;
 
-        $user = User::where('email', $request->email)->first();
-
-        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
-                'errors' => [
-                    'msg' => ['*Los datos ingresados son incorrectos'],
-                ],
-            ],  422);
+                'token' => $token,
+                'user' => $user
+            ], 200);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $token = $user->createToken($request->email)->plainTextToken;
-        return response()->json([
-            'res' => true,
-            'token' => $token,
-            'user' => $user
-        ],200);
     }
 }
