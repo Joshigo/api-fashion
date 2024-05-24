@@ -10,8 +10,8 @@ class Color extends Model
     use HasFactory;
 
     protected $fillable = [
-        'color_name',
-        'color_code',
+        'name',
+        'code',
         'status',
         'texture_id',
     ];

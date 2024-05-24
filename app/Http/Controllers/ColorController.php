@@ -20,10 +20,10 @@ class ColorController extends Controller
         } else {
             $colors = Color::with('texture')->get();
         }
-    
+
         return response()->json($colors);
     }
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -34,8 +34,8 @@ class ColorController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'color_name' => 'required|string|max:255',
-            'color_code' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:255',
             'status' => 'required|boolean',
             'texture_id' => 'required|exists:textures,id',
         ]);
@@ -73,8 +73,8 @@ class ColorController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'color_name' => 'required|string|max:255',
-            'color_code' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:255',
             'status' => 'required|boolean',
             'texture_id' => 'required|exists:textures,id',
         ]);
