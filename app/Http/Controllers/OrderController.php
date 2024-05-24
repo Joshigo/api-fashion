@@ -14,11 +14,13 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('orderDetails')->get();
+        $perPage = $request->input('per_page', 10);
+        $orders = Order::with('orderDetails')->paginate($perPage);
         return response()->json($orders);
     }
+    
 
     /**
      * Store a newly created resource in storage.

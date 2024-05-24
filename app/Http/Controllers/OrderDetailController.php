@@ -17,13 +17,13 @@ class OrderDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $details = OrderDetail::orderBy("id","desc")->paginate(10);
-        $orderDetails = OrderDetail::with('orders')->get();
+        $perPage = $request->input('per_page', 10);
+        $orderDetails = OrderDetail::with('orders')->paginate($perPage);
         return response()->json($orderDetails);
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -100,7 +100,7 @@ class OrderDetailController extends Controller
             'order_details.*.category_name' => 'required|string|max:255',
             'order_details.*.texture_id' => 'required|string|max:255',
             'order_details.*.texture_name' => 'required|string|max:255',
-            'order_details.*.texture_provider' => 'required|string|max:255',
+            // 'order_details.*.texture_provider' => 'required|string|max:255',
             'order_details.*.color_id' => 'required|string|max:255',
             'order_details.*.color_name' => 'required|string|max:255',
             'order_details.*.color_code' => 'required|string|max:255',

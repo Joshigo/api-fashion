@@ -13,13 +13,14 @@ class Texture extends Model
         'name',
         'status',
         'piece_id',
+        'file_path',
     ];
 
     public function piece()
     {
         return $this->belongsTo(Piece::class);
     }
-    
+
     public function colors()
     {
         return $this->hasMany(Color::class);
