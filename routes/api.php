@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
     Route::apiResource('categories', CategoryController::class);
     Route::group(['prefix' => 'pieces'], function () {
         Route::get('/', [PieceController::class, 'index']);
@@ -42,9 +42,14 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
         Route::delete('/{texture}', [TextureController::class, 'destroy']);
     });
     Route::apiResource('colors', ColorController::class);
+    Route::post('/register-admin', [AuthController::class, 'registro_admin']);
 });
+Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
+    Route::post('change-password', [AuthController::class, 'changePassword']);
+});
+
 Route::apiResource('order-details', OrderDetailController::class);
 Route::apiResource('orders', OrderController::class);
 
-Route::post('/register', [AuthController::class, 'registro']);
+// Route::post('/register', [AuthController::class, 'registro']);
 Route::post('/login', [AuthController::class, 'login']);
