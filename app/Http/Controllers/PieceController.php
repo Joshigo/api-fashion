@@ -14,6 +14,23 @@ class PieceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @OA\Get(
+     *     path="/api/pieces",
+     *     summary="Show categories",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar todos los usuarios.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         if ($request->has('status')) {
@@ -21,10 +38,10 @@ class PieceController extends Controller
         } else {
             $pieces = Piece::with('category')->get();
         }
-    
+
         return response()->json($pieces);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *

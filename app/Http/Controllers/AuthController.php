@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+
     // public function registro(Request $request)
     // {
     //     $validator = Validator::make($request->all(), [
@@ -41,8 +42,36 @@ class AuthController extends Controller
 
     //     return response()->json(['message' => 'Usuario registrado con éxito'], 201);
     // }
+
+/**
+     * @OA\Post(
+     *     path="/api/register-admin",
+     *     summary="Create user",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"name","email", "password","password_confirmation"},
+     *             @OA\Property(property="name", type="string", example="short"),
+     *             @OA\Property(property="email", type="email", example="admin@example.com"),
+     *             @OA\Property(property="password", type="string", example="12345678"),
+     *             @OA\Property(property="password_confirmation", type="string", example="12345678"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="user successfully created",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="An error occurred."
+     *     )
+     * )
+     */
+
     public function registro_admin(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'last_name' => 'string|max:255',
@@ -76,6 +105,31 @@ class AuthController extends Controller
     {
         $users = User::all();
     }
+
+/**
+     * @OA\Post(
+     *     path="/api/login",
+     *     summary="Login user",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", example="admin@example.com"),
+     *             @OA\Property(property="password", type="string", example="12345678"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="user successfully logged",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="An error occurred."
+     *     )
+     * )
+*/
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -119,6 +173,31 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized, invalid credentials'], 401);
         }
     }
+
+/**
+     * @OA\Post(
+     *     path="/api/change-password",
+     *     summary="change password user",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"user_id", "password", "password_confirmation"},
+     *             @OA\Property(property="user_id", type="number", example="1"),
+     *             @OA\Property(property="password", type="string", example="12345678"),
+     *             @OA\Property(property="password_confirmation", type="string", example="12345678"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="user successfully logged",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="An error occurred."
+     *     )
+     * )
+*/
 
     public function changePassword(Request $request)
     {

@@ -7,6 +7,22 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+/**
+     * @OA\Get(
+     *     path="/api/user",
+     *     summary="Show users",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar todos los usuarios.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+    */
     public function registro(Request $request)
     {
         $request->validate([

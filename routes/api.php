@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
+    // los gets estan permitidos para todos
     Route::apiResource('categories', CategoryController::class);
     Route::group(['prefix' => 'pieces'], function () {
         Route::get('/', [PieceController::class, 'index']);
