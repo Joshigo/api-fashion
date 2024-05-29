@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Http\JsonResponse;
 
 class OrderDetailController extends Controller
 {
@@ -22,17 +23,17 @@ class OrderDetailController extends Controller
     public function store(Request $request)
     {
         $user = $this->validateAndCreateOrAssignUser($request->user);
-        if ($user instanceof \Illuminate\Http\JsonResponse) {
+        if ($user instanceof JsonResponse) {
             return $user;
         }
 
         $order = $this->validateAndCreateOrder($request->order, $user->id);
-        if ($order instanceof \Illuminate\Http\JsonResponse) {
+        if ($order instanceof JsonResponse) {
             return $order;
         }
 
         $orderDetails = $this->validateAndCreateOrderDetails($request->order_details, $order->id);
-        if ($orderDetails instanceof \Illuminate\Http\JsonResponse) {
+        if ($orderDetails instanceof JsonResponse) {
             return $orderDetails;
         }
 
