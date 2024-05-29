@@ -13,6 +13,21 @@ class ColorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    /**
+     * @OA\Get(
+     *     path="/api/colors",
+     *     summary="Show colors",
+     *     @OA\Response(
+     *         response=200,
+     *         description="show all colors with status true.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="An error occurred."
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         if ($request->has('status')) {
@@ -31,6 +46,32 @@ class ColorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+/**
+ * @OA\Post(
+ *     path="/api/colors",
+ *     summary="Create color",
+ *     security={{"bearerAuth":{}}},
+ *     @OA\RequestBody(
+ *         @OA\JsonContent(
+ *             required={"name","code""status","texture_id"},
+ *             @OA\Property(property="name", type="string", example="blue"),
+ *             @OA\Property(property="code", type="string", example="#ffff"),
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="texture_id", type="number", example="1"),
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="color successfully created",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -70,6 +111,39 @@ class ColorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    /**
+ * @OA\Put(
+ *     path="/api/colors/{id}",
+ *     summary="Update color",
+ *     security={ {"bearerAuth":{}} },
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"name","code""status","texture_id"},
+ *             @OA\Property(property="name", type="string", example="Updated Name"),
+ *             @OA\Property(property="code", type="string", example="Updated code"),
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="texture_id", type="number", example=1),
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="color successfully updated",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -98,6 +172,29 @@ class ColorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+/**
+ * @OA\Delete(
+ *     path="/api/colors/{id}",
+ *     summary="Delete color",
+ *     security={ {"bearerAuth":{}} },
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="color successfully deleted",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
     public function destroy($id)
     {
         $color = Color::find($id);
@@ -106,6 +203,6 @@ class ColorController extends Controller
         }
 
         $color->delete();
-        return response()->json(null, 204);
+        return response()->json(['message' => 'color deleted sucessfull'], 201);
     }
 }

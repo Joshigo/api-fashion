@@ -22,7 +22,6 @@ class CategoryController extends Controller
      * @OA\Get(
      *     path="/api/categories",
      *     summary="Show categories",
-     *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
      *         description="Mostrar todos los usuarios.",
@@ -115,7 +114,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /**
+/**
  * @OA\Put(
  *     path="/api/categories/{id}",
  *     summary="Update category",
@@ -189,7 +188,7 @@ class CategoryController extends Controller
  *     ),
  *     @OA\Response(
  *         response=200,
- *         description="Category successfully created",
+ *         description="Category successfully deleted",
  *         @OA\JsonContent()
  *     ),
  *     @OA\Response(
@@ -206,7 +205,7 @@ class CategoryController extends Controller
         }
 
         $category->delete();
-        return response()->json(['message' => 'Category deleted sucessfull'], 204);
+        return response()->json(['message' => 'category deleted sucessfull'], 201);
     }
 
 

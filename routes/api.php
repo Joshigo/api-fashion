@@ -25,14 +25,19 @@ Route::middleware('auth:sanctum')->get('user', function (Request $request) {
 });
 
 
-Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin,supner_admin'])->group(function () {
     Route::apiResource('categories', CategoryController::class);
+
+    Route::apiResource('order-details', OrderDetailController::class);
+    Route::apiResource('orders', OrderController::class);
+
     Route::group(['prefix' => 'pieces'], function () {
-        // Route::get('/', [PieceController::class, 'index']);
         Route::post('/', [PieceController::class, 'store']);
-        // Route::get('/{piece}', [PieceController::class, 'show']);
         Route::post('/{piece}', [PieceController::class, 'update']);
         Route::delete('/{piece}', [PieceController::class, 'destroy']);
+
+        // Route::get('/{piece}', [PieceController::class, 'show']);
+        // Route::get('/', [PieceController::class, 'index']);
         // Route::get('/{id}/details', [PieceController::class, 'showWithRelations']);
     });
     Route::group(['prefix' => 'textures'], function () {
@@ -47,6 +52,17 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
 });
 Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
     Route::post('change-password', [AuthController::class, 'changePassword']);
+});
+
+Route::group(['prefix' => 'orders'], function () {
+    Route::get('/', [OrderController::class, 'index']);
+    Route::get('/{id}', [OrderController::class, 'show']);
+});
+
+Route::group(['prefix' => 'order-details'], function () {
+    Route::get('/', [OrderDetailController::class, 'index']);
+    Route::post('/', [OrderDetailController::class, 'store']);
+    Route::get('/{order_detail}', [OrderDetailController::class, 'show']);
 });
 
 Route::group(['prefix' => 'pieces'], function () {
@@ -70,8 +86,7 @@ Route::group(['prefix' => 'categories'], function () {
     Route::get('/{category}', [CategoryController::class, 'show']);
 });
 
-Route::apiResource('order-details', OrderDetailController::class);
-Route::apiResource('orders', OrderController::class);
+
 
 // Route::post('/register', [AuthController::class, 'registro']);
 Route::post('/login', [AuthController::class, 'login']);

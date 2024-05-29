@@ -46,7 +46,7 @@ class AuthController extends Controller
 /**
      * @OA\Post(
      *     path="/api/register-admin",
-     *     summary="Create user",
+     *     summary="Create Super admin",
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         @OA\JsonContent(
@@ -59,7 +59,7 @@ class AuthController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="user successfully created",
+     *         description="Super admin successfully created",
      *         @OA\JsonContent()
      *     ),
      *     @OA\Response(

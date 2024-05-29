@@ -13,13 +13,112 @@ use Illuminate\Http\JsonResponse;
 
 class OrderDetailController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/order-details/{id}",
+     *     summary="Show order details",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     * ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="show order details.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="An error occurred."
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);
         $orderDetails = OrderDetail::with('orders')->paginate($perPage);
         return response()->json($orderDetails);
     }
-    
+
+/**
+ * @OA\Post(
+ *     path="/api/order-details",
+ *     summary="Create a new order and order details",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="order_details",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     type="object",
+ *                     @OA\Property(property="description", type="string", example="Description 1"),
+ *                     @OA\Property(property="price_unit", type="number", format="float", example=10.0),
+ *                     @OA\Property(property="piece_id", type="string", example="piece1"),
+ *                     @OA\Property(property="piece_type", type="string", example="type1"),
+ *                     @OA\Property(property="piece_name", type="string", example="Piece Name 1"),
+ *                     @OA\Property(property="piece_price", type="number", format="float", example=100.0),
+ *                     @OA\Property(property="category_id", type="string", example="1"),
+ *                     @OA\Property(property="category_name", type="string", example="Category Name 1"),
+ *                     @OA\Property(property="texture_id", type="string", example="texture1"),
+ *                     @OA\Property(property="texture_name", type="string", example="Texture Name 1"),
+ *                     @OA\Property(property="texture_provider", type="string", example="Provider 1"),
+ *                     @OA\Property(property="color_id", type="string", example="color1"),
+ *                     @OA\Property(property="color_name", type="string", example="Color Name 1"),
+ *                     @OA\Property(property="color_code", type="string", example="Code1")
+ *                 )
+ *             ),
+ *             @OA\Property(
+ *                 property="order",
+ *                 type="object",
+ *                 @OA\Property(property="neck", type="number", format="float", example=15.5),
+ *                 @OA\Property(property="shoulder", type="number", format="float", example=18.0),
+ *                 @OA\Property(property="arm", type="number", format="float", example=24.0),
+ *                 @OA\Property(property="mid_front", type="number", format="float", example=20.0),
+ *                 @OA\Property(property="bicep", type="number", format="float", example=12.5),
+ *                 @OA\Property(property="bust", type="number", format="float", example=36.0),
+ *                 @OA\Property(property="size", type="number", format="float", example=10.0),
+ *                 @OA\Property(property="waist", type="number", format="float", example=30.0),
+ *                 @OA\Property(property="leg", type="number", format="float", example=32.0),
+ *                 @OA\Property(property="hip", type="number", format="float", example=40.0),
+ *                 @OA\Property(property="skirt_length", type="number", format="float", example=24.0),
+ *                 @OA\Property(property="unit_length", type="string", example="inch"),
+ *                 @OA\Property(property="user_id", type="integer", example=1)
+ *             ),
+ *             @OA\Property(
+ *                 property="user",
+ *                 type="object",
+ *                 @OA\Property(property="name", type="string", example="John"),
+ *                 @OA\Property(property="last_name", type="string", example="Doe"),
+ *                 @OA\Property(property="email", type="string", example="john.doe2@example.com"),
+ *                 @OA\Property(property="phone", type="string", example="1234567890"),
+ *                 @OA\Property(property="country", type="string", example="USA"),
+ *                 @OA\Property(property="city", type="string", example="New York")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Order and order details created successfully.",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="order", type="object"),
+ *             @OA\Property(property="order_details", type="array", @OA\Items(type="object"))
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation errors.",
+ *         @OA\JsonContent(type="object")
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
     public function store(Request $request)
     {
         $user = $this->validateAndCreateOrAssignUser($request->user);
@@ -144,6 +243,28 @@ class OrderDetailController extends Controller
         //
     }
 
+/**
+ * @OA\Delete(
+ *     path="/api/order-details/{id}",
+ *     summary="Delete order",
+ *     security={ {"bearerAuth":{}} },
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="order detail successfully deleted",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
     public function destroy($id)
     {
         $orderDetail = OrderDetail::find($id);
@@ -152,6 +273,6 @@ class OrderDetailController extends Controller
         }
 
         $orderDetail->delete();
-        return response()->json(null, 204);
+        return response()->json(['message' => 'order detail deleted sucessfull'], 201);
     }
 }

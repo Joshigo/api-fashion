@@ -14,13 +14,29 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @OA\Get(
+     *     path="/api/orders",
+     *     summary="Show orders",
+     *     @OA\Response(
+     *         response=200,
+     *         description="show all orders.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="An error occurred."
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);
         $orders = Order::with('orderDetails')->paginate($perPage);
         return response()->json($orders);
     }
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -118,6 +134,29 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+ /**
+ * @OA\Delete(
+ *     path="/api/orders/{id}",
+ *     summary="Delete order",
+ *     security={ {"bearerAuth":{}} },
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="order successfully deleted",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
     public function destroy($id)
     {
         $order = Order::find($id);
@@ -126,6 +165,6 @@ class OrderController extends Controller
         }
 
         $order->delete();
-        return response()->json(null, 204);
+        return response()->json(['message' => 'order deleted sucessfull'], 201);
     }
 }

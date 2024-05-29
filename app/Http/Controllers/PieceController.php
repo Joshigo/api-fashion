@@ -18,16 +18,15 @@ class PieceController extends Controller
      /**
      * @OA\Get(
      *     path="/api/pieces",
-     *     summary="Show categories",
-     *     security={{"bearerAuth":{}}},
+     *     summary="Show pieces",
      *     @OA\Response(
      *         response=200,
-     *         description="Mostrar todos los usuarios.",
+     *         description="show all pieces.",
      *         @OA\JsonContent()
      *     ),
      *     @OA\Response(
      *         response="default",
-     *         description="Ha ocurrido un error."
+     *         description="An error occurred."
      *     )
      * )
      */
@@ -41,19 +40,79 @@ class PieceController extends Controller
 
         return response()->json($pieces);
     }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+/**
+ * @OA\Post(
+ *     path="/api/pieces",
+ *     summary="Create piece",
+ *     security={{"bearerAuth":{}}},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="name",
+ *                     type="string",
+ *                     description="Name of the piece"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="type",
+ *                     type="string",
+ *                     description="Type of the piece"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="color",
+ *                     type="string",
+ *                     description="Color of the piece"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="price",
+ *                     type="number",
+ *                     description="Price of the piece"
+ *                 ),
+ *                 @OA\Property(
+ *                      property="status",
+ *                      type="string",
+ *                      description="status of the piece"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="category_id",
+ *                     type="number",
+ *                     description="Category ID of the piece"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="file",
+ *                     type="string",
+ *                     format="binary",
+ *                     description="Image file of the piece"
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Piece successfully created",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'color' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
             'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'color' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'status' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
@@ -112,6 +171,77 @@ class PieceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+/**
+ * @OA\Post(
+ *     path="/api/pieces/{id}",
+ *     summary="Update piece",
+ *     security={{"bearerAuth":{}}},
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\RequestBody(
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 type="object",
+ *                 properties={
+ *                     @OA\Property(
+ *                         property="name",
+ *                         type="string",
+ *                         description="Name of the piece"
+ *                     ),
+ *                     @OA\Property(
+ *                         property="type",
+ *                         type="string",
+ *                         description="Type of the piece"
+ *                     ),
+ *                     @OA\Property(
+ *                         property="color",
+ *                         type="string",
+ *                         description="Color of the piece"
+ *                     ),
+ *                     @OA\Property(
+ *                         property="price",
+ *                         type="number",
+ *                         description="Price of the piece"
+ *                     ),
+ *                     @OA\Property(
+ *                         property="status",
+ *                         type="string",
+ *                         description="Status of the piece"
+ *                     ),
+ *                     @OA\Property(
+ *                         property="category_id",
+ *                         type="number",
+ *                         description="Category ID of the piece"
+ *                     ),
+ *                     @OA\Property(
+ *                         property="file",
+ *                         type="string",
+ *                         format="binary",
+ *                         description="Image file of the piece. Only jpg, png, jpeg, gif, svg files are allowed.",
+ *                         pattern="^.+\.(jpg|png|jpeg|gif|svg)$"
+ *                     )
+ *                 },
+ *                 required={"name", "type", "color", "price", "status", "category_id"}
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Piece successfully updated",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
+
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -161,6 +291,29 @@ class PieceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+ /**
+ * @OA\Delete(
+ *     path="/api/pieces/{id}",
+ *     summary="Delete piece",
+ *     security={ {"bearerAuth":{}} },
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="piece successfully deleted",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
     public function destroy($id)
     {
         $piece = Piece::find($id);
@@ -174,6 +327,6 @@ class PieceController extends Controller
         }
 
         $piece->delete();
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Category deleted sucessfull'], 201);
     }
 }

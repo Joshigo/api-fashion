@@ -11,15 +11,14 @@ class UserController extends Controller
      * @OA\Get(
      *     path="/api/user",
      *     summary="Show users",
-     *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
-     *         description="Mostrar todos los usuarios.",
+     *         description="show user.",
      *         @OA\JsonContent()
      *     ),
      *     @OA\Response(
      *         response="default",
-     *         description="Ha ocurrido un error."
+     *         description="An error occurred."
      *     )
      * )
     */
@@ -41,7 +40,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(['message' => 'Usuario registrado con éxito'], 201);
+        return response()->json(['message' => 'user register sucessfully'], 201);
     }
 
 }

@@ -12,7 +12,7 @@
     "paths": {
         "/api/register-admin": {
             "post": {
-                "summary": "Create user",
+                "summary": "Create Super admin",
                 "operationId": "423baca9a9ac6d7918a49ce5382eb6b7",
                 "requestBody": {
                     "content": {
@@ -49,7 +49,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "user successfully created",
+                        "description": "Super admin successfully created",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -182,12 +182,7 @@
                     "default": {
                         "description": "Ha ocurrido un error."
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "post": {
                 "summary": "Create category",
@@ -323,7 +318,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Category successfully created",
+                        "description": "Category successfully deleted",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -341,13 +336,13 @@
                 ]
             }
         },
-        "/api/pieces": {
+        "/api/colors": {
             "get": {
-                "summary": "Show categories",
-                "operationId": "d1b8238e59eac61a43053323ca31e47b",
+                "summary": "Show colors",
+                "operationId": "9af5ded8d7143a0f97e53725eda97464",
                 "responses": {
                     "200": {
-                        "description": "Mostrar todos los usuarios.",
+                        "description": "show all colors.",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -355,7 +350,853 @@
                         }
                     },
                     "default": {
-                        "description": "Ha ocurrido un error."
+                        "description": "An error occurred."
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create color",
+                "operationId": "e4d3770c69f36a71c5936b3b35655342",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "code\"status",
+                                    "texture_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "blue"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "#ffff"
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "texture_id": {
+                                        "type": "number",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "color successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/colors/{id}": {
+            "put": {
+                "summary": "Update color",
+                "operationId": "717be7234f38d1fb4ff4678ba4f59581",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "code\"status",
+                                    "texture_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Updated Name"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "Updated code"
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "texture_id": {
+                                        "type": "number",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "color successfully updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "summary": "Delete color",
+                "operationId": "1667d6964960e3a8158e80e50c69f19c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "color successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/orders": {
+            "get": {
+                "summary": "Show orders",
+                "operationId": "2cd7e03021e72d9d799c12dfe179c865",
+                "responses": {
+                    "200": {
+                        "description": "show all orders.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                }
+            }
+        },
+        "/api/orders/{id}": {
+            "delete": {
+                "summary": "Delete order",
+                "operationId": "303a7b797887b66c7790c4c187b54790",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "texture successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/order-details/{id}": {
+            "get": {
+                "summary": "Show order details",
+                "operationId": "6a2f1dd060dacb2eccd09cf49d3b9850",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "show order details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete order",
+                "operationId": "cda3f9927ff4e14ced8d63412aec46da",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "order detail successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/order-details": {
+            "post": {
+                "summary": "Create a new order and order details",
+                "operationId": "294519256e6751e07791f359fd7efeb6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "order_details": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Description 1"
+                                                },
+                                                "price_unit": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 10
+                                                },
+                                                "piece_id": {
+                                                    "type": "string",
+                                                    "example": "piece1"
+                                                },
+                                                "piece_type": {
+                                                    "type": "string",
+                                                    "example": "type1"
+                                                },
+                                                "piece_name": {
+                                                    "type": "string",
+                                                    "example": "Piece Name 1"
+                                                },
+                                                "piece_price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 100
+                                                },
+                                                "category_id": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "category_name": {
+                                                    "type": "string",
+                                                    "example": "Category Name 1"
+                                                },
+                                                "texture_id": {
+                                                    "type": "string",
+                                                    "example": "texture1"
+                                                },
+                                                "texture_name": {
+                                                    "type": "string",
+                                                    "example": "Texture Name 1"
+                                                },
+                                                "texture_provider": {
+                                                    "type": "string",
+                                                    "example": "Provider 1"
+                                                },
+                                                "color_id": {
+                                                    "type": "string",
+                                                    "example": "color1"
+                                                },
+                                                "color_name": {
+                                                    "type": "string",
+                                                    "example": "Color Name 1"
+                                                },
+                                                "color_code": {
+                                                    "type": "string",
+                                                    "example": "Code1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "order": {
+                                        "properties": {
+                                            "neck": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 15.5
+                                            },
+                                            "shoulder": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 18
+                                            },
+                                            "arm": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 24
+                                            },
+                                            "mid_front": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 20
+                                            },
+                                            "bicep": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 12.5
+                                            },
+                                            "bust": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 36
+                                            },
+                                            "size": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 10
+                                            },
+                                            "waist": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 30
+                                            },
+                                            "leg": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 32
+                                            },
+                                            "hip": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 40
+                                            },
+                                            "skirt_length": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 24
+                                            },
+                                            "unit_length": {
+                                                "type": "string",
+                                                "example": "inch"
+                                            },
+                                            "user_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "user": {
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "John"
+                                            },
+                                            "last_name": {
+                                                "type": "string",
+                                                "example": "Doe"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "john.doe2@example.com"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "1234567890"
+                                            },
+                                            "country": {
+                                                "type": "string",
+                                                "example": "USA"
+                                            },
+                                            "city": {
+                                                "type": "string",
+                                                "example": "New York"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order and order details created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "order": {
+                                            "type": "object"
+                                        },
+                                        "order_details": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                }
+            }
+        },
+        "/api/pieces": {
+            "get": {
+                "summary": "Show pieces",
+                "operationId": "d1b8238e59eac61a43053323ca31e47b",
+                "responses": {
+                    "200": {
+                        "description": "show all pieces.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create piece",
+                "operationId": "812fd41a59d234853c03b2a92374147f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the piece",
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "description": "Type of the piece",
+                                        "type": "string"
+                                    },
+                                    "color": {
+                                        "description": "Color of the piece",
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "description": "Price of the piece",
+                                        "type": "number"
+                                    },
+                                    "status": {
+                                        "description": "status of the piece",
+                                        "type": "string"
+                                    },
+                                    "category_id": {
+                                        "description": "Category ID of the piece",
+                                        "type": "number"
+                                    },
+                                    "file": {
+                                        "description": "Image file of the piece",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Piece successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pieces/{id}": {
+            "post": {
+                "summary": "Update piece",
+                "operationId": "b79886044a7debc74e9dcfd0a43f220a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "type",
+                                    "color",
+                                    "price",
+                                    "status",
+                                    "category_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the piece",
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "description": "Type of the piece",
+                                        "type": "string"
+                                    },
+                                    "color": {
+                                        "description": "Color of the piece",
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "description": "Price of the piece",
+                                        "type": "number"
+                                    },
+                                    "status": {
+                                        "description": "Status of the piece",
+                                        "type": "string"
+                                    },
+                                    "category_id": {
+                                        "description": "Category ID of the piece",
+                                        "type": "number"
+                                    },
+                                    "file": {
+                                        "description": "Image file of the piece. Only jpg, png, jpeg, gif, svg files are allowed.",
+                                        "type": "string",
+                                        "format": "binary",
+                                        "pattern": "^.+\\.(jpg|png|jpeg|gif|svg)$"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Piece successfully updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "summary": "Delete piece",
+                "operationId": "57063793f2e07d3532ea07d49c9edf85",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "piece successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/textures": {
+            "get": {
+                "summary": "Show texture",
+                "operationId": "be2902e43b4995355fa247b41484bac4",
+                "responses": {
+                    "200": {
+                        "description": "show all textures.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create texture",
+                "operationId": "be6509aca3aaa97a64a705a55581445c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the texture",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "status of the texture",
+                                        "type": "string"
+                                    },
+                                    "piece_id": {
+                                        "description": "piece ID of the texture",
+                                        "type": "number"
+                                    },
+                                    "file": {
+                                        "description": "Image file of the texture",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "texture successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/textures/{id}": {
+            "post": {
+                "summary": "Update texture",
+                "operationId": "19bc620679201dc2acb5ac2afbdc375e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "status",
+                                    "piece_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the texture",
+                                        "type": "string"
+                                    },
+                                    "piece_id": {
+                                        "description": "piece ID of the texture",
+                                        "type": "number"
+                                    },
+                                    "status": {
+                                        "description": "Status of the texture",
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "description": "Image file of the piece. Only jpg, png, jpeg, gif, svg files are allowed.",
+                                        "type": "string",
+                                        "format": "binary",
+                                        "pattern": "^.+\\.(jpg|png|jpeg|gif|svg)$"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "texture successfully updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "summary": "Delete texture",
+                "operationId": "4a88c87c53cc71802530cbfc2e1e6766",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "texture successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
                     }
                 },
                 "security": [
@@ -381,12 +1222,7 @@
                     "default": {
                         "description": "Ha ocurrido un error."
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         }
     },
