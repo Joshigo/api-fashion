@@ -12,11 +12,6 @@ use Illuminate\Support\Str;
 
 class OrderDetailController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);
@@ -24,16 +19,29 @@ class OrderDetailController extends Controller
         return response()->json($orderDetails);
     }
     
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        // Validar y crear o asignar el usuario
-        $userValidator = Validator::make($request->user, [
+        $user = $this->validateAndCreateOrAssignUser($request->user);
+        if ($user instanceof \Illuminate\Http\JsonResponse) {
+            return $user;
+        }
+
+        $order = $this->validateAndCreateOrder($request->order, $user->id);
+        if ($order instanceof \Illuminate\Http\JsonResponse) {
+            return $order;
+        }
+
+        $orderDetails = $this->validateAndCreateOrderDetails($request->order_details, $order->id);
+        if ($orderDetails instanceof \Illuminate\Http\JsonResponse) {
+            return $orderDetails;
+        }
+
+        return response()->json(['order' => $order, 'order_details' => $orderDetails], 201);
+    }
+
+    private function validateAndCreateOrAssignUser($userData)
+    {
+        $validator = Validator::make($userData, [
             'name' => 'required|string|max:255',
             'last_name' => 'string|max:255',
             'email' => 'required|string|email|max:255',
@@ -41,29 +49,32 @@ class OrderDetailController extends Controller
             'country' => 'required|string|max:255',
             'city' => 'required|string|max:255',
         ]);
-    
-        if ($userValidator->fails()) {
-            return response()->json($userValidator->errors(), 422);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
-    
-        $user = User::where('email', $request->user['email'])->first();
-    
+
+        $user = User::where('email', $userData['email'])->first();
+
         if (!$user) {
-            $password = $request->user['password'] ?? Str::random(10);
-            $user = new User([
-                'name' => $request->user['name'],
-                'last_name' => $request->user['last_name'],
-                'email' => $request->user['email'],
+            $password = $userData['password'] ?? Str::random(10);
+            $user = User::create([
+                'name' => $userData['name'],
+                'last_name' => $userData['last_name'],
+                'email' => $userData['email'],
                 'password' => bcrypt($password),
-                'phone' => $request->user['phone'],
-                'country' => $request->user['country'],
-                'city' => $request->user['city'],
+                'phone' => $userData['phone'],
+                'country' => $userData['country'],
+                'city' => $userData['city'],
             ]);
-            $user->save();
         }
-    
-        // Validar la orden
-        $orderValidator = Validator::make($request->order, [
+
+        return $user;
+    }
+
+    private function validateAndCreateOrder($orderData, $userId)
+    {
+        $validator = Validator::make($orderData, [
             'status' => 'boolean',
             'neck' => 'numeric|min:0',
             'shoulder' => 'numeric|min:0',
@@ -77,18 +88,18 @@ class OrderDetailController extends Controller
             'hip' => 'numeric|min:0',
             'skirt_length' => 'numeric|min:0',
             'unit_length' => 'required|in:cm,inch',
-            // 'user_id' => 'required|exists:users,id',
         ]);
-    
-        if ($orderValidator->fails()) {
-            return response()->json($orderValidator->errors(), 422);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
-    
-        // Crear la orden
-        $order = Order::create(array_merge($request->order, ['user_id' => $user->id]));
-    
-        // Validar los detalles de la orden
-        $detailsValidator = Validator::make($request->all(), [
+
+        return Order::create(array_merge($orderData, ['user_id' => $userId]));
+    }
+
+    private function validateAndCreateOrderDetails($orderDetailsData, $orderId)
+    {
+        $validator = Validator::make(['order_details' => $orderDetailsData], [
             'order_details' => 'required|array',
             'order_details.*.description' => 'required|string|max:255',
             'order_details.*.price_unit' => 'required|numeric|min:0',
@@ -100,34 +111,24 @@ class OrderDetailController extends Controller
             'order_details.*.category_name' => 'required|string|max:255',
             'order_details.*.texture_id' => 'required|string|max:255',
             'order_details.*.texture_name' => 'required|string|max:255',
-            // 'order_details.*.texture_provider' => 'required|string|max:255',
             'order_details.*.color_id' => 'required|string|max:255',
             'order_details.*.color_name' => 'required|string|max:255',
             'order_details.*.color_code' => 'required|string|max:255',
-            // 'order_details.*.order_id' => 'required|exists:orders,id',
         ]);
-    
-        if ($detailsValidator->fails()) {
-            return response()->json($detailsValidator->errors(), 422);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
-    
-        // Crear los detalles de la orden
+
         $orderDetails = [];
-        foreach ($request->order_details as $detail) {
-            $detail['order_id'] = $order->id;
+        foreach ($orderDetailsData as $detail) {
+            $detail['order_id'] = $orderId;
             $orderDetails[] = OrderDetail::create($detail);
         }
-    
-        return response()->json(['order' => $order, 'order_details' => $orderDetails], 201);
-    }
-        
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+        return $orderDetails;
+    }
+
     public function show($id)
     {
         $orderDetail = OrderDetail::find($id);
@@ -137,53 +138,11 @@ class OrderDetailController extends Controller
         return response()->json($orderDetail);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        // return response()->json({});
-        // $validator = Validator::make($request->all(), [
-        //     'description' => 'required|string|max:255',
-        //     'price_unit' => 'required|numeric|min:0',
-        //     'piece_id' => 'required|string|max:255',
-        //     'piece_type' => 'required|string|max:255',
-        //     'piece_name' => 'required|string|max:255',
-        //     'piece_price' => 'required|numeric|min:0',
-        //     'category_id' => 'required|string|max:255',
-        //     'category_name' => 'required|string|max:255',
-        //     'texture_id' => 'required|string|max:255',
-        //     'texture_name' => 'required|string|max:255',
-        //     'texture_provider' => 'required|string|max:255',
-        //     'color_id' => 'required|string|max:255',
-        //     'color_name' => 'required|string|max:255',
-        //     'color_code' => 'required|string|max:255',
-        //     'order_id' => 'required|exists:orders,id',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return response()->json($validator->errors(), 422);
-        // }
-
-        // $orderDetail = OrderDetail::find($id);
-        // if (is_null($orderDetail)) {
-        //     return response()->json(['message' => 'Order detail not found'], 404);
-        // }
-
-        // $orderDetail->update($request->all());
-        // return response()->json($orderDetail);
+        //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $orderDetail = OrderDetail::find($id);
