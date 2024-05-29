@@ -18,9 +18,9 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, ...$roles)
     {
         // Permitir todos los métodos GET
-        if ($request->isMethod('get')) {
-            return $next($request);
-        }
+        // if ($request->isMethod('get')) {
+        //     return $next($request);
+        // }
         
         // Verificar el rol del usuario para otros métodos
         if ($request->user() && !in_array($request->user()->role, $roles)) {
