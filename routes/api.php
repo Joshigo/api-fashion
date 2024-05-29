@@ -24,21 +24,21 @@ Route::middleware('auth:sanctum')->get('user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
-    // los gets estan permitidos para todos
     Route::apiResource('categories', CategoryController::class);
     Route::group(['prefix' => 'pieces'], function () {
-        Route::get('/', [PieceController::class, 'index']);
+        // Route::get('/', [PieceController::class, 'index']);
         Route::post('/', [PieceController::class, 'store']);
-        Route::get('/{piece}', [PieceController::class, 'show']);
+        // Route::get('/{piece}', [PieceController::class, 'show']);
         Route::post('/{piece}', [PieceController::class, 'update']);
         Route::delete('/{piece}', [PieceController::class, 'destroy']);
-        Route::get('/{id}/details', [PieceController::class, 'showWithRelations']);
+        // Route::get('/{id}/details', [PieceController::class, 'showWithRelations']);
     });
     Route::group(['prefix' => 'textures'], function () {
-        Route::get('/', [TextureController::class, 'index']);
+        // Route::get('/', [TextureController::class, 'index']);
         Route::post('/', [TextureController::class, 'store']);
-        Route::get('/{texture}', [TextureController::class, 'show']);
+        // Route::get('/{texture}', [TextureController::class, 'show']);
         Route::post('/{texture}', [TextureController::class, 'update']);
         Route::delete('/{texture}', [TextureController::class, 'destroy']);
     });
@@ -47,6 +47,27 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
 });
 Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
     Route::post('change-password', [AuthController::class, 'changePassword']);
+});
+
+Route::group(['prefix' => 'pieces'], function () {
+    Route::get('/', [PieceController::class, 'index']);
+    Route::get('/{piece}', [PieceController::class, 'show']);
+    Route::get('/{id}/details', [PieceController::class, 'showWithRelations']);
+});
+
+Route::group(['prefix' => 'textures'], function () {
+    Route::get('/', [TextureController::class, 'index']);
+    Route::get('/{texture}', [TextureController::class, 'show']);
+});
+
+Route::group(['prefix' => 'colors'], function () {
+    Route::get('/', [ColorController::class, 'index']);
+    Route::get('/{color}', [ColorController::class, 'show']);
+});
+
+Route::group(['prefix' => 'categories'], function () {
+    Route::get('/', [CategoryController::class, 'index']);
+    Route::get('/{category}', [CategoryController::class, 'show']);
 });
 
 Route::apiResource('order-details', OrderDetailController::class);
