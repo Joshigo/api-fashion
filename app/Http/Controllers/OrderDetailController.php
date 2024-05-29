@@ -104,7 +104,7 @@ class OrderDetailController extends Controller
             'order_details.*.color_id' => 'required|string|max:255',
             'order_details.*.color_name' => 'required|string|max:255',
             'order_details.*.color_code' => 'required|string|max:255',
-            'order_details.*.order_id' => 'required|exists:orders,id',
+            // 'order_details.*.order_id' => 'required|exists:orders,id',
         ]);
     
         if ($detailsValidator->fails()) {
