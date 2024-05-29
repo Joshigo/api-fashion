@@ -24,8 +24,6 @@ class Authenticate
         if ($this->authenticate($request, $guards)) {
             return $next($request);
         }
-        // $request->headers->remove('X-CSRF-TOKEN:');
-        // dd($request->headers->all());
 
         return $request->expectsJson()
                ? response()->json(['message' => 'Unauthorized'], 401)
