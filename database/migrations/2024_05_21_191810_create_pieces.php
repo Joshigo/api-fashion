@@ -15,13 +15,14 @@ return new class extends Migration
     {
         Schema::create('pieces', function (Blueprint $table) {
             $table->id();
-            $table->string('color');
-            $table->string('type');
             $table->string('name');
-            $table->decimal('price', 10, 2);
+            $table->string('type');
             $table->boolean('status')->default(true);
-            $table->timestamps();
+            $table->decimal('usage_meter_texture', 10, 2);
+            $table->decimal('price_base', 10, 2);
+            $table->decimal('price_total', 10, 2)->default(0);
             $table->unsignedBigInteger('category_id');
+            $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }

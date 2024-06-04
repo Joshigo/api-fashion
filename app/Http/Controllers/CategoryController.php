@@ -18,21 +18,21 @@ class CategoryController extends Controller
 
 
 
-     /**
-     * @OA\Get(
-     *     path="/api/categories",
-     *     summary="Show categories",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Mostrar todos los usuarios.",
-     *         @OA\JsonContent()
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
+/**
+ * @OA\Get(
+ *     path="/api/categories",
+ *     summary="Show categories",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Mostrar todos los usuarios.",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="Ha ocurrido un error."
+ *     )
+ * )
+ */
 
     public function index(Request $request)
     {

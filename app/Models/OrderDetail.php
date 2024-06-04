@@ -11,20 +11,23 @@ class OrderDetail extends Model
 
     protected $fillable = [
         'description',
-        'price_unit',
         'piece_id',
         'piece_type',
         'piece_name',
-        'piece_price',
+        'piece_price_base',
+        'piece_usage_meter_texture',
+        'piece_price_total',
+        'discount',
         'category_id',
         'category_name',
         'texture_id',
+        'status',
         'texture_name',
-        // 'texture_provider',
-        'color_id',
-        'color_name',
-        'color_code',
+        'texture_cost_meter',
+        'texture_total_stock',
         'order_id',
+        'texture_color_name',
+        'texture_color_code',
     ];
 
     public function order()

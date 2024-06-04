@@ -94,8 +94,12 @@ class TextureController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'status' => 'required|boolean',
-            'piece_id' => 'required|exists:pieces,id',
+            'color_name' => 'required|string|max:255',
+            'color_code' => 'required|string|max:255',
+            'total_stock' => 'required|numeric|min:0',
+            'cost_meter_texture' => 'required|numeric|min:0',
             'file' => 'required|file|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'piece_id' => 'required|exists:pieces,id',
         ]);
 
         if ($validator->fails()) {
@@ -200,8 +204,12 @@ class TextureController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'status' => 'required|boolean',
-            'piece_id' => 'required|exists:pieces,id',
+            'color_name' => 'required|string|max:255',
+            'color_code' => 'required|string|max:255',
+            'total_stock' => 'required|numeric|min:0',
+            'cost_meter_texture' => 'required|numeric|min:0',
             'file' => 'sometimes|file|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'piece_id' => 'required|exists:pieces,id',
         ]);
 
         if ($validator->fails()) {

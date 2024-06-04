@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('colors', function (Blueprint $table) {
+        Schema::create('texture_stock_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code');
-            $table->boolean('status')->default(true);
             $table->timestamps();
+            $table->integer('total_stock');
+            $table->integer('amount');
 
             $table->unsignedBigInteger('texture_id');
-            $table->foreign('texture_id')->references('id')->on('textures')->onDelete('cascade');
+            $table->foreign('texture_id')->references('id')->on('textures');
         });
     }
 
@@ -32,10 +31,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('colors', function (Blueprint $table) {
+        Schema::table('texture_stock_histories', function (Blueprint $table) {
             $table->dropForeign(['texture_id']);
             $table->dropColumn('texture_id');
         });
-        Schema::dropIfExists('colors');
+        Schema::dropIfExists('texture_stock_histories');
     }
 };

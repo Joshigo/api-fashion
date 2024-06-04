@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PieceController;
 use App\Http\Controllers\TextureController;
-use App\Http\Controllers\ColorController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TextureStockHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,16 +20,21 @@ use App\Http\Controllers\OrderController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
 Route::middleware('auth:sanctum')->get('user', function (Request $request) {
     return $request->user();
 });
 
 
-Route::middleware(['auth:sanctum', 'role:admin,supner_admin'])->group(function () {
+Route::post('/register-admin', [AuthController::class, 'registro_admin']);
+Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
     Route::apiResource('categories', CategoryController::class);
-
     Route::apiResource('order-details', OrderDetailController::class);
     Route::apiResource('orders', OrderController::class);
+
+    Route::get('/textures-stock', [TextureStockHistoryController::class,'index']);
+    Route::post('/texture-history/{id}', [TextureStockHistoryController::class,'updateTexture']);
 
     Route::group(['prefix' => 'pieces'], function () {
         Route::post('/', [PieceController::class, 'store']);
@@ -47,8 +52,6 @@ Route::middleware(['auth:sanctum', 'role:admin,supner_admin'])->group(function (
         Route::post('/{texture}', [TextureController::class, 'update']);
         Route::delete('/{texture}', [TextureController::class, 'destroy']);
     });
-    Route::apiResource('colors', ColorController::class);
-    Route::post('/register-admin', [AuthController::class, 'registro_admin']);
 });
 Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
     Route::post('change-password', [AuthController::class, 'changePassword']);
@@ -63,6 +66,7 @@ Route::group(['prefix' => 'order-details'], function () {
     Route::get('/', [OrderDetailController::class, 'index']);
     Route::post('/', [OrderDetailController::class, 'store']);
     Route::get('/{order_detail}', [OrderDetailController::class, 'show']);
+    Route::put('/{order_detail}/status', [OrderDetailController::class, 'changeStatusOrder']);
 });
 
 Route::group(['prefix' => 'pieces'], function () {
@@ -76,11 +80,6 @@ Route::group(['prefix' => 'textures'], function () {
     Route::get('/{texture}', [TextureController::class, 'show']);
 });
 
-Route::group(['prefix' => 'colors'], function () {
-    Route::get('/', [ColorController::class, 'index']);
-    Route::get('/{color}', [ColorController::class, 'show']);
-});
-
 Route::group(['prefix' => 'categories'], function () {
     Route::get('/', [CategoryController::class, 'index']);
     Route::get('/{category}', [CategoryController::class, 'show']);
@@ -90,3 +89,9 @@ Route::group(['prefix' => 'categories'], function () {
 
 // Route::post('/register', [AuthController::class, 'registro']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/login-out', [AuthController::class, 'login2'])->name('errorlogin2'); //redirect errorlogin2, 'error' => 'Unauthorized, loginout...'
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']); // destroy token
+});
+

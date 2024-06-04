@@ -12,8 +12,12 @@ class Texture extends Model
     protected $fillable = [
         'name',
         'status',
-        'piece_id',
+        'color_name',
+        'color_code',
+        'total_stock',
+        'cost_meter_texture',
         'file_path',
+        'piece_id',
     ];
 
     public function piece()
@@ -21,8 +25,9 @@ class Texture extends Model
         return $this->belongsTo(Piece::class);
     }
 
-    public function colors()
+    public function textureStock()
     {
-        return $this->hasMany(Color::class);
+        return $this->belongsTo(TextureStockHistory::class);
     }
+
 }

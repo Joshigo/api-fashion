@@ -17,6 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('status')->default(true);
+            $table->string('color_name');
+            $table->string('color_code');
+            $table->decimal('total_stock', 10, 2);
+            $table->decimal('cost_meter_texture', 10, 2);
+
             $table->timestamps();
 
             $table->unsignedBigInteger('piece_id');

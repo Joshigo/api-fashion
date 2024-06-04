@@ -5,19 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Color extends Model
+class TextureStockHistory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'code',
-        'status',
-        'texture_id',
+        'amount','texture_id','total_stock',
     ];
 
-    public function texture()
+    public function textures()
     {
-        return $this->belongsTo(Texture::class);
+        return $this->hasMany(Texture::class);
     }
 }

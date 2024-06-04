@@ -38,6 +38,10 @@ class PieceController extends Controller
             $pieces = Piece::with('category')->get();
         }
 
+        foreach ($pieces as $piece) {
+            $piece->price_total = $piece->calculatePriceTotal();
+        }
+
         return response()->json($pieces);
     }
     /**
@@ -67,19 +71,19 @@ class PieceController extends Controller
  *                     description="Type of the piece"
  *                 ),
  *                 @OA\Property(
- *                     property="color",
- *                     type="string",
- *                     description="Color of the piece"
- *                 ),
- *                 @OA\Property(
- *                     property="price",
- *                     type="number",
- *                     description="Price of the piece"
- *                 ),
- *                 @OA\Property(
  *                      property="status",
  *                      type="string",
- *                      description="status of the piece"
+ *                      description="status of the piece(set '1' or '2')"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="price_base",
+ *                     type="number",
+ *                     description="Price base of the piece"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="usage_meter_texture",
+ *                     type="number",
+ *                     description="usage meter texture of the piece"
  *                 ),
  *                 @OA\Property(
  *                     property="category_id",
@@ -112,9 +116,9 @@ class PieceController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'color' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
             'status' => 'required|boolean',
+            'price_base' => 'required|numeric|min:0',
+            'usage_meter_texture' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'file' => 'required|file|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ]);
@@ -199,19 +203,19 @@ class PieceController extends Controller
  *                         description="Type of the piece"
  *                     ),
  *                     @OA\Property(
- *                         property="color",
- *                         type="string",
- *                         description="Color of the piece"
- *                     ),
- *                     @OA\Property(
- *                         property="price",
- *                         type="number",
- *                         description="Price of the piece"
- *                     ),
- *                     @OA\Property(
  *                         property="status",
  *                         type="string",
  *                         description="Status of the piece"
+ *                     ),
+ *                     @OA\Property(
+ *                         property="price_base",
+ *                         type="number",
+ *                         description="Price base of the piece"
+ *                     ),
+ *                     @OA\Property(
+ *                         property="usage_meter_texture",
+ *                         type="number",
+ *                         description="usage meter texture base of the piece"
  *                     ),
  *                     @OA\Property(
  *                         property="category_id",
@@ -226,7 +230,7 @@ class PieceController extends Controller
  *                         pattern="^.+\.(jpg|png|jpeg|gif|svg)$"
  *                     )
  *                 },
- *                 required={"name", "type", "color", "price", "status", "category_id"}
+ *                 required={"name", "type", "status", "price_base", "usage_meter_texture", "category_id"}
  *             )
  *         )
  *     ),
@@ -245,11 +249,11 @@ class PieceController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'color' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
+            'type' => 'required|string|max:255',
             'status' => 'required|boolean',
+            'price_base' => 'required|numeric|min:0',
+            'usage_meter_texture' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'file' => 'sometimes|file|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ]);

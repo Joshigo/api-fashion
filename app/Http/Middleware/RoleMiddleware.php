@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
@@ -21,12 +22,12 @@ class RoleMiddleware
         // if ($request->isMethod('get')) {
         //     return $next($request);
         // }
-        
-        // Verificar el rol del usuario para otros métodos
-        if ($request->user() && !in_array($request->user()->role, $roles)) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+
+        if (!(Auth::check() && in_array(Auth::user()->role, $roles))) {
+            return response()->json(['error' => 'Unauthorized2'], 403);
         }
 
         return $next($request);
     }
+
 }

@@ -153,6 +153,8 @@ return [
         */
         'securityDefinitions' => [
             'securitySchemes' => [
+
+
                 /*
                  * Examples of Security schemes
                 */
@@ -175,7 +177,6 @@ return [
                     ]
                 ],
                 */
-
                 /* Open API 3.0 support
                 'passport' => [ // Unique name of security
                     'type' => 'oauth2', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".

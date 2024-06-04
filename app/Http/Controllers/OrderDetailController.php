@@ -125,12 +125,11 @@ class OrderDetailController extends Controller
         if ($user instanceof JsonResponse) {
             return $user;
         }
-
         $order = $this->validateAndCreateOrder($request->order, $user->id);
+
         if ($order instanceof JsonResponse) {
             return $order;
         }
-
         $orderDetails = $this->validateAndCreateOrderDetails($request->order_details, $order->id);
         if ($orderDetails instanceof JsonResponse) {
             return $orderDetails;
@@ -201,19 +200,23 @@ class OrderDetailController extends Controller
     {
         $validator = Validator::make(['order_details' => $orderDetailsData], [
             'order_details' => 'required|array',
+            'order_details.*.category_id' => 'required|exists:categories,id',
+            'order_details.*.texture_id' => 'required|exists:textures,id',
+            'order_details.*.piece_id' => 'required|exists:pieces,id',
             'order_details.*.description' => 'required|string|max:255',
-            'order_details.*.price_unit' => 'required|numeric|min:0',
-            'order_details.*.piece_id' => 'required|string|max:255',
             'order_details.*.piece_type' => 'required|string|max:255',
             'order_details.*.piece_name' => 'required|string|max:255',
-            'order_details.*.piece_price' => 'required|numeric|min:0',
-            'order_details.*.category_id' => 'required|string|max:255',
+            'order_details.*.piece_usage_meter_texture' => 'required|numeric|min:0',
+            'order_details.*.piece_price_base' => 'required|numeric|min:0',
+            'order_details.*.status' => 'required|in:Acepted,Pending,Completed',
+            'order_details.*.piece_price_total' => 'required|numeric|min:0',
+            'order_details.*.piece_discount' => 'numeric|min:0|max:100',
             'order_details.*.category_name' => 'required|string|max:255',
-            'order_details.*.texture_id' => 'required|string|max:255',
             'order_details.*.texture_name' => 'required|string|max:255',
-            'order_details.*.color_id' => 'required|string|max:255',
-            'order_details.*.color_name' => 'required|string|max:255',
-            'order_details.*.color_code' => 'required|string|max:255',
+            'order_details.*.texture_cost_meter' => 'required|numeric|min:0',
+            'order_details.*.texture_total_stock' => 'required|numeric|min:0',
+            'order_details.*.texture_color_name' => 'required|string|max:255',
+            'order_details.*.texture_color_code' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -223,10 +226,31 @@ class OrderDetailController extends Controller
         $orderDetails = [];
         foreach ($orderDetailsData as $detail) {
             $detail['order_id'] = $orderId;
+            // dd($detail);
             $orderDetails[] = OrderDetail::create($detail);
         }
 
         return $orderDetails;
+    }
+
+    public function changeStatusOrder(Request $request, $id)
+    {
+        $orderDetail = OrderDetail::find($id);
+        if (is_null($orderDetail)) {
+            return response()->json(['message' => 'Order detail not found'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:Acepted,Pending,Completed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(["message" => "Status could be Acepted, Pending or Completed"], 404);
+        }
+
+        $orderDetail->status = $request->input('status');
+        $orderDetail->save();
+        return response()->json(['message' => 'Status changed'], 200);
     }
 
     public function show($id)

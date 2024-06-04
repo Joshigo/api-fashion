@@ -10,11 +10,11 @@ class Piece extends Model
     use HasFactory;
 
     protected $fillable = [
-        'color',
-        'type',
         'name',
-        'price',
+        'type',
         'status',
+        'price_base',
+        'usage_meter_texture',
         'category_id',
         'file_path',
     ];
@@ -28,5 +28,10 @@ class Piece extends Model
     {
         return $this->hasMany(Texture::class);
     }
-
+    public function calculatePriceTotal()
+    {
+        $costMeterTexture = $this->textures->sum('cost_meter_texture');
+        // dd($costMeterTexture * $this->usage_meter_texture + $this->price_base);
+        return ($costMeterTexture * $this->usage_meter_texture) + $this->price_base;
+    }
 }

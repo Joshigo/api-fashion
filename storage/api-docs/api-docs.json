@@ -67,6 +67,53 @@
                 ]
             }
         },
+        "/api/logout": {
+            "post": {
+                "summary": "Logout user - destroy token",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "user-token successfully destroyed",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/login": {
             "post": {
                 "summary": "Login user",
@@ -106,12 +153,26 @@
                     "default": {
                         "description": "An error occurred."
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
+                }
+            }
+        },
+        "/api/login-out": {
+            "get": {
+                "summary": "login-out - json response",
+                "operationId": "0e3c5240ae7a6e964f1b8bcaccd75c32",
+                "responses": {
+                    "200": {
+                        "description": "sucessfully - Unauthorized, loginout...",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
                     }
-                ]
+                }
             }
         },
         "/api/change-password": {
@@ -336,178 +397,6 @@
                 ]
             }
         },
-        "/api/colors": {
-            "get": {
-                "summary": "Show colors",
-                "operationId": "9af5ded8d7143a0f97e53725eda97464",
-                "responses": {
-                    "200": {
-                        "description": "show all colors.",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "default": {
-                        "description": "An error occurred."
-                    }
-                }
-            },
-            "post": {
-                "summary": "Create color",
-                "operationId": "e4d3770c69f36a71c5936b3b35655342",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "name",
-                                    "code\"status",
-                                    "texture_id"
-                                ],
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "blue"
-                                    },
-                                    "code": {
-                                        "type": "string",
-                                        "example": "#ffff"
-                                    },
-                                    "status": {
-                                        "type": "boolean",
-                                        "example": true
-                                    },
-                                    "texture_id": {
-                                        "type": "number",
-                                        "example": "1"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "color successfully created",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "default": {
-                        "description": "An error occurred."
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/colors/{id}": {
-            "put": {
-                "summary": "Update color",
-                "operationId": "717be7234f38d1fb4ff4678ba4f59581",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "name",
-                                    "code\"status",
-                                    "texture_id"
-                                ],
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Updated Name"
-                                    },
-                                    "code": {
-                                        "type": "string",
-                                        "example": "Updated code"
-                                    },
-                                    "status": {
-                                        "type": "boolean",
-                                        "example": true
-                                    },
-                                    "texture_id": {
-                                        "type": "number",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "color successfully updated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "default": {
-                        "description": "An error occurred."
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "delete": {
-                "summary": "Delete color",
-                "operationId": "1667d6964960e3a8158e80e50c69f19c",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "color successfully deleted",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "default": {
-                        "description": "An error occurred."
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/orders": {
             "get": {
                 "summary": "Show orders",
@@ -543,7 +432,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "texture successfully deleted",
+                        "description": "order successfully deleted",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -874,17 +763,17 @@
                                         "description": "Type of the piece",
                                         "type": "string"
                                     },
-                                    "color": {
-                                        "description": "Color of the piece",
+                                    "status": {
+                                        "description": "status of the piece(set '1' or '2')",
                                         "type": "string"
                                     },
-                                    "price": {
-                                        "description": "Price of the piece",
+                                    "price_base": {
+                                        "description": "Price base of the piece",
                                         "type": "number"
                                     },
-                                    "status": {
-                                        "description": "status of the piece",
-                                        "type": "string"
+                                    "usage_meter_texture": {
+                                        "description": "usage meter texture of the piece",
+                                        "type": "number"
                                     },
                                     "category_id": {
                                         "description": "Category ID of the piece",
@@ -942,9 +831,9 @@
                                 "required": [
                                     "name",
                                     "type",
-                                    "color",
-                                    "price",
                                     "status",
+                                    "price_base",
+                                    "usage_meter_texture",
                                     "category_id"
                                 ],
                                 "properties": {
@@ -956,17 +845,17 @@
                                         "description": "Type of the piece",
                                         "type": "string"
                                     },
-                                    "color": {
-                                        "description": "Color of the piece",
-                                        "type": "string"
-                                    },
-                                    "price": {
-                                        "description": "Price of the piece",
-                                        "type": "number"
-                                    },
                                     "status": {
                                         "description": "Status of the piece",
                                         "type": "string"
+                                    },
+                                    "price_base": {
+                                        "description": "Price base of the piece",
+                                        "type": "number"
+                                    },
+                                    "usage_meter_texture": {
+                                        "description": "usage meter texture base of the piece",
+                                        "type": "number"
                                     },
                                     "category_id": {
                                         "description": "Category ID of the piece",
@@ -1038,7 +927,7 @@
         },
         "/api/textures": {
             "get": {
-                "summary": "Show texture",
+                "summary": "Show all textures with status true",
                 "operationId": "be2902e43b4995355fa247b41484bac4",
                 "responses": {
                     "200": {
@@ -1212,7 +1101,7 @@
                 "operationId": "8028efaf277c13c4b8bf08050f9293f0",
                 "responses": {
                     "200": {
-                        "description": "Mostrar todos los usuarios.",
+                        "description": "show user.",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -1220,7 +1109,7 @@
                         }
                     },
                     "default": {
-                        "description": "Ha ocurrido un error."
+                        "description": "An error occurred."
                     }
                 }
             }

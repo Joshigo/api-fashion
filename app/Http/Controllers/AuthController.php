@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\HasApiTokens;
 
 class AuthController extends Controller
 {
@@ -83,7 +84,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['Ha ocurrido un error' => $validator->errors()], 422);
+            return response()->json(['An error occurred.' => $validator->errors()], 422);
         }
 
         $user = new User([
@@ -99,8 +100,57 @@ class AuthController extends Controller
 
         $user->save();
 
-        return response()->json(['message' => 'Usuario registrado con éxito'], 201);
+        return response()->json(['message' => 'user successfully registered'], 201);
     }
+
+/**
+     * @OA\Post(
+     *     path="/api/logout",
+     *     summary="Logout user - destroy token",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", example="admin@example.com"),
+     *             @OA\Property(property="password", type="string", example="12345678"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="user-token successfully destroyed",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="An error occurred."
+     *     )
+     * )
+*/
+    public function logout(Request $request){
+
+        $user = Auth::user();
+
+        if ($user) {
+
+            $user->currentAccessToken()->delete();
+
+
+            Auth::guard('web')->logout();
+
+            return response()->json([
+                'res' => true,
+                'msg' => 'logout sucessfully'
+            ], 200);
+        }
+
+
+        return response()->json([
+            'res' => false,
+            'msg' => 'No authenticated user'
+        ], 401);
+    }
+
+
     public function index()
     {
         $users = User::all();
@@ -110,7 +160,6 @@ class AuthController extends Controller
      * @OA\Post(
      *     path="/api/login",
      *     summary="Login user",
-     *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             required={"email", "password"},
@@ -129,7 +178,6 @@ class AuthController extends Controller
      *     )
      * )
 */
-
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -172,6 +220,25 @@ class AuthController extends Controller
         } else {
             return response()->json(['error' => 'Unauthorized, invalid credentials'], 401);
         }
+    }
+
+/**
+ * @OA\Get(
+ *     path="/api/login-out",
+ *     summary="login-out - json response",
+ *     @OA\Response(
+ *         response=200,
+ *         description="sucessfully - Unauthorized, loginout...",
+ *         @OA\JsonContent()
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="An error occurred."
+ *     )
+ * )
+ */
+    public function login2 (Request $request){
+        return response()->json(['error' => 'Unauthorized, loginout...'], 201);
     }
 
 /**
