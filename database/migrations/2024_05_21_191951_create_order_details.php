@@ -22,16 +22,18 @@ return new class extends Migration {
             $table->decimal('piece_price_base', 10, 2);
             $table->decimal('piece_usage_meter_texture', 10, 2);
             $table->decimal('piece_price_total', 10, 2);
+            $table->string('piece_file_path')->nullable();
             $table->decimal('discount', 10, 2)->default(0);
             $table->bigInteger('category_id');
             $table->string('category_name');
             $table->bigInteger('texture_id');
             $table->string('texture_name');
-            $table->enum('status', ['Accepted', 'Pending', 'Completed'])->default('Pending');
+            $table->enum('status', ['accepted', 'pending', 'completed'])->default('pending');
             $table->string('texture_color_name');
             $table->string('texture_color_code');
             $table->decimal('texture_cost_meter', 10, 2);
             $table->decimal('texture_total_stock', 10, 2);
+            $table->string('texture_file_path')->nullable();
             // $table->string('texture_provider');
 
             $table->unsignedBigInteger('order_id');

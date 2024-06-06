@@ -28,6 +28,8 @@ class OrderDetail extends Model
         'order_id',
         'texture_color_name',
         'texture_color_code',
+        'piece_file_path',
+        'texture_file_path',
     ];
 
     public function order()

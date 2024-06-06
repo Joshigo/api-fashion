@@ -132,8 +132,10 @@ class AuthController extends Controller
 
         if ($user) {
 
+            // echo($user);
             $user->currentAccessToken()->delete();
 
+            // $user->tokens()->delete();
 
             Auth::guard('web')->logout();
 
@@ -244,7 +246,7 @@ class AuthController extends Controller
 /**
      * @OA\Post(
      *     path="/api/change-password",
-     *     summary="change password user",
+     *     summary="change password user (only super-admin)",
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         @OA\JsonContent(

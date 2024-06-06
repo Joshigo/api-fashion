@@ -28,9 +28,11 @@ return new class extends Migration
             $table->decimal('waist', 8, 2)->nullable();
             $table->decimal('leg', 8, 2)->nullable();
             $table->decimal('hip', 8, 2)->nullable();
+            $table->decimal('total_price', 10, 2)->default(0);
+            $table->decimal('total_texture', 10, 2)->default(0);
             $table->decimal('skirt_length', 8, 2)->nullable();
             $table->enum('unit_length', ['cm', 'inch'])->default('inch');
-
+            $table->softDeletes();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });

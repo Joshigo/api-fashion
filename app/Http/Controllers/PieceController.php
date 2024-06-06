@@ -38,10 +38,6 @@ class PieceController extends Controller
             $pieces = Piece::with('category')->get();
         }
 
-        foreach ($pieces as $piece) {
-            $piece->price_total = $piece->calculatePriceTotal();
-        }
-
         return response()->json($pieces);
     }
     /**
@@ -205,7 +201,7 @@ class PieceController extends Controller
  *                     @OA\Property(
  *                         property="status",
  *                         type="string",
- *                         description="Status of the piece"
+ *                         description="Status of the piece(set '1' or '0')"
  *                     ),
  *                     @OA\Property(
  *                         property="price_base",
@@ -331,6 +327,6 @@ class PieceController extends Controller
         }
 
         $piece->delete();
-        return response()->json(['message' => 'Category deleted sucessfull'], 201);
+        return response()->json(['message' => 'Piece deleted sucessfull'], 201);
     }
 }

@@ -28,13 +28,15 @@ Route::middleware('auth:sanctum')->get('user', function (Request $request) {
 
 
 Route::post('/register-admin', [AuthController::class, 'registro_admin']);
+
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('order-details', OrderDetailController::class);
+    Route::put('/{id}/change-status', [OrderDetailController::class, 'changeStatusOrder']);
     Route::apiResource('orders', OrderController::class);
 
-    Route::get('/textures-stock', [TextureStockHistoryController::class,'index']);
-    Route::post('/texture-history/{id}', [TextureStockHistoryController::class,'updateTexture']);
+    Route::get('/textures-history', [TextureStockHistoryController::class,'index']);
+    Route::post('/texture-update', [TextureStockHistoryController::class,'updateTexture']);
 
     Route::group(['prefix' => 'pieces'], function () {
         Route::post('/', [PieceController::class, 'store']);
@@ -66,7 +68,6 @@ Route::group(['prefix' => 'order-details'], function () {
     Route::get('/', [OrderDetailController::class, 'index']);
     Route::post('/', [OrderDetailController::class, 'store']);
     Route::get('/{order_detail}', [OrderDetailController::class, 'show']);
-    Route::put('/{order_detail}/status', [OrderDetailController::class, 'changeStatusOrder']);
 });
 
 Route::group(['prefix' => 'pieces'], function () {

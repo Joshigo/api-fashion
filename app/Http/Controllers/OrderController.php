@@ -113,19 +113,21 @@ class OrderController extends Controller
             'skirt_length' => 'numeric|min:0',
             'unit_length' => 'required|in:cm,inch',
             'user_id' => 'nullable|exists:users,id',
-        ]);
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
+        return response()->json('It should only be in order details', 422);
 
-        $order = Order::find($id);
-        if (is_null($order)) {
-            return response()->json(['message' => 'Order not found'], 404);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json($validator->errors(), 422);
+        // }
 
-        $order->update($request->all());
-        return response()->json($order);
+        // $order = Order::find($id);
+        // if (is_null($order)) {
+        //     return response()->json(['message' => 'Order not found'], 404);
+        // }
+
+        // $order->update($request->all());
+        // return response()->json($order);
     }
 
     /**

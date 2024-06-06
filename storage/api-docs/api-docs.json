@@ -177,7 +177,7 @@
         },
         "/api/change-password": {
             "post": {
-                "summary": "change password user",
+                "summary": "change password user (only super-admin)",
                 "operationId": "540baf9b2324b156be71c57911de6714",
                 "requestBody": {
                     "content": {
@@ -450,10 +450,306 @@
                 ]
             }
         },
+        "/api/order-details": {
+            "get": {
+                "summary": "Show order details",
+                "operationId": "f97019837839800cbcb07cb29cb7d79d",
+                "responses": {
+                    "200": {
+                        "description": "show all order details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a new order and order details",
+                "operationId": "294519256e6751e07791f359fd7efeb6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "order_details": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "category_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "texture_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "piece_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Custom shirt"
+                                                },
+                                                "piece_type": {
+                                                    "type": "string",
+                                                    "example": "shirt"
+                                                },
+                                                "piece_name": {
+                                                    "type": "string",
+                                                    "example": "Custom Shirt"
+                                                },
+                                                "piece_usage_meter_texture": {
+                                                    "type": "integer",
+                                                    "example": 2.5
+                                                },
+                                                "piece_price_base": {
+                                                    "type": "integer",
+                                                    "example": 5.5
+                                                },
+                                                "piece_file": {
+                                                    "type": "string",
+                                                    "example": "textures/1/texture-DSC_3540.JPG"
+                                                },
+                                                "category_name": {
+                                                    "type": "string",
+                                                    "example": "Shirts"
+                                                },
+                                                "texture_name": {
+                                                    "type": "string",
+                                                    "example": "Cotton"
+                                                },
+                                                "texture_cost_meter": {
+                                                    "type": "integer",
+                                                    "example": 20.5
+                                                },
+                                                "texture_total_stock": {
+                                                    "type": "integer",
+                                                    "example": 90.5
+                                                },
+                                                "texture_color_name": {
+                                                    "type": "string",
+                                                    "example": "amarillo"
+                                                },
+                                                "texture_color_code": {
+                                                    "type": "string",
+                                                    "example": "31238c"
+                                                },
+                                                "texture_file": {
+                                                    "type": "string",
+                                                    "example": "textures/1/texture-DSC_3540.JPG"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "order": {
+                                        "properties": {
+                                            "status": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "neck": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 16
+                                            },
+                                            "shoulder": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 18
+                                            },
+                                            "arm": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 12
+                                            },
+                                            "mid_front": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 20
+                                            },
+                                            "bicep": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 14
+                                            },
+                                            "bust": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 38
+                                            },
+                                            "size": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 10
+                                            },
+                                            "waist": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 32
+                                            },
+                                            "leg": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 34
+                                            },
+                                            "hip": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 40
+                                            },
+                                            "skirt_length": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 24
+                                            },
+                                            "unit_length": {
+                                                "type": "string",
+                                                "example": "'cm','inch'"
+                                            },
+                                            "user_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "user": {
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "John"
+                                            },
+                                            "last_name": {
+                                                "type": "string",
+                                                "example": "Doe"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "john.doe@example.com"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "+1234567890"
+                                            },
+                                            "country": {
+                                                "type": "string",
+                                                "example": "USA"
+                                            },
+                                            "city": {
+                                                "type": "string",
+                                                "example": "New York"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order and order details created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "order": {
+                                            "type": "object"
+                                        },
+                                        "order_details": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                }
+            }
+        },
+        "/api/{id}/change-status": {
+            "put": {
+                "summary": "Change status order detail",
+                "operationId": "aefe0e7b6ae9379f868bad55379d0fcc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "'accepted','completed' "
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/order-details/{id}": {
             "get": {
                 "summary": "Show order details",
-                "operationId": "6a2f1dd060dacb2eccd09cf49d3b9850",
+                "operationId": "3ab9e8c793da62b02f10bc391303c46f",
                 "parameters": [
                     {
                         "name": "id",
@@ -509,223 +805,6 @@
                         "bearerAuth": []
                     }
                 ]
-            }
-        },
-        "/api/order-details": {
-            "post": {
-                "summary": "Create a new order and order details",
-                "operationId": "294519256e6751e07791f359fd7efeb6",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "order_details": {
-                                        "type": "array",
-                                        "items": {
-                                            "properties": {
-                                                "description": {
-                                                    "type": "string",
-                                                    "example": "Description 1"
-                                                },
-                                                "price_unit": {
-                                                    "type": "number",
-                                                    "format": "float",
-                                                    "example": 10
-                                                },
-                                                "piece_id": {
-                                                    "type": "string",
-                                                    "example": "piece1"
-                                                },
-                                                "piece_type": {
-                                                    "type": "string",
-                                                    "example": "type1"
-                                                },
-                                                "piece_name": {
-                                                    "type": "string",
-                                                    "example": "Piece Name 1"
-                                                },
-                                                "piece_price": {
-                                                    "type": "number",
-                                                    "format": "float",
-                                                    "example": 100
-                                                },
-                                                "category_id": {
-                                                    "type": "string",
-                                                    "example": "1"
-                                                },
-                                                "category_name": {
-                                                    "type": "string",
-                                                    "example": "Category Name 1"
-                                                },
-                                                "texture_id": {
-                                                    "type": "string",
-                                                    "example": "texture1"
-                                                },
-                                                "texture_name": {
-                                                    "type": "string",
-                                                    "example": "Texture Name 1"
-                                                },
-                                                "texture_provider": {
-                                                    "type": "string",
-                                                    "example": "Provider 1"
-                                                },
-                                                "color_id": {
-                                                    "type": "string",
-                                                    "example": "color1"
-                                                },
-                                                "color_name": {
-                                                    "type": "string",
-                                                    "example": "Color Name 1"
-                                                },
-                                                "color_code": {
-                                                    "type": "string",
-                                                    "example": "Code1"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "order": {
-                                        "properties": {
-                                            "neck": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 15.5
-                                            },
-                                            "shoulder": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 18
-                                            },
-                                            "arm": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 24
-                                            },
-                                            "mid_front": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 20
-                                            },
-                                            "bicep": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 12.5
-                                            },
-                                            "bust": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 36
-                                            },
-                                            "size": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 10
-                                            },
-                                            "waist": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 30
-                                            },
-                                            "leg": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 32
-                                            },
-                                            "hip": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 40
-                                            },
-                                            "skirt_length": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 24
-                                            },
-                                            "unit_length": {
-                                                "type": "string",
-                                                "example": "inch"
-                                            },
-                                            "user_id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    "user": {
-                                        "properties": {
-                                            "name": {
-                                                "type": "string",
-                                                "example": "John"
-                                            },
-                                            "last_name": {
-                                                "type": "string",
-                                                "example": "Doe"
-                                            },
-                                            "email": {
-                                                "type": "string",
-                                                "example": "john.doe2@example.com"
-                                            },
-                                            "phone": {
-                                                "type": "string",
-                                                "example": "1234567890"
-                                            },
-                                            "country": {
-                                                "type": "string",
-                                                "example": "USA"
-                                            },
-                                            "city": {
-                                                "type": "string",
-                                                "example": "New York"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Order and order details created successfully.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "order": {
-                                            "type": "object"
-                                        },
-                                        "order_details": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation errors.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "default": {
-                        "description": "An error occurred."
-                    }
-                }
             }
         },
         "/api/pieces": {
@@ -846,7 +925,7 @@
                                         "type": "string"
                                     },
                                     "status": {
-                                        "description": "Status of the piece",
+                                        "description": "Status of the piece(set '1' or '0')",
                                         "type": "string"
                                     },
                                     "price_base": {
@@ -957,7 +1036,7 @@
                                         "type": "string"
                                     },
                                     "status": {
-                                        "description": "status of the texture",
+                                        "description": "status of the texture(set '1' or '2')",
                                         "type": "string"
                                     },
                                     "piece_id": {
@@ -965,9 +1044,26 @@
                                         "type": "number"
                                     },
                                     "file": {
-                                        "description": "Image file of the texture",
+                                        "description": "Image file of the piece. Only jpg, png, jpeg, gif, svg files are allowed.",
                                         "type": "string",
-                                        "format": "binary"
+                                        "format": "binary",
+                                        "pattern": "^.+\\.(jpg|png|jpeg|gif|svg)$"
+                                    },
+                                    "color_name": {
+                                        "description": "name of the color",
+                                        "type": "string"
+                                    },
+                                    "color_code": {
+                                        "description": "code of the color",
+                                        "type": "string"
+                                    },
+                                    "total_stock": {
+                                        "description": "total stock of the texture",
+                                        "type": "number"
+                                    },
+                                    "cost_meter_texture": {
+                                        "description": "price meter of texture",
+                                        "type": "number"
                                     }
                                 },
                                 "type": "object"
@@ -1028,7 +1124,7 @@
                                         "type": "number"
                                     },
                                     "status": {
-                                        "description": "Status of the texture",
+                                        "description": "Status of the texture(set '1' or '2')",
                                         "type": "string"
                                     },
                                     "file": {
@@ -1036,6 +1132,22 @@
                                         "type": "string",
                                         "format": "binary",
                                         "pattern": "^.+\\.(jpg|png|jpeg|gif|svg)$"
+                                    },
+                                    "color_name": {
+                                        "description": "name of the color",
+                                        "type": "string"
+                                    },
+                                    "color_code": {
+                                        "description": "code of the color",
+                                        "type": "string"
+                                    },
+                                    "total_stock": {
+                                        "description": "total stock of the texture",
+                                        "type": "number"
+                                    },
+                                    "cost_meter_texture": {
+                                        "description": "price meter of texture",
+                                        "type": "number"
                                     }
                                 },
                                 "type": "object"
@@ -1095,6 +1207,77 @@
                 ]
             }
         },
+        "/api/textures-history": {
+            "get": {
+                "summary": "Show texture stock history",
+                "operationId": "e1eb2d857c0080f165191875c76b02c7",
+                "responses": {
+                    "200": {
+                        "description": "show all history.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/texture-update": {
+            "post": {
+                "summary": "update texture stock",
+                "operationId": "d7e4e620adf17352dec4a18425d4a5a1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "texture_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Stock texture sucessfully updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An error occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/user": {
             "get": {
                 "summary": "Show users",
@@ -1111,7 +1294,12 @@
                     "default": {
                         "description": "An error occurred."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },

@@ -19,6 +19,8 @@ class Piece extends Model
         'file_path',
     ];
 
+    protected $appends = ['price_total'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -28,10 +30,10 @@ class Piece extends Model
     {
         return $this->hasMany(Texture::class);
     }
-    public function calculatePriceTotal()
+
+    public function getPriceTotalAttribute()
     {
         $costMeterTexture = $this->textures->sum('cost_meter_texture');
-        // dd($costMeterTexture * $this->usage_meter_texture + $this->price_base);
         return ($costMeterTexture * $this->usage_meter_texture) + $this->price_base;
     }
 }

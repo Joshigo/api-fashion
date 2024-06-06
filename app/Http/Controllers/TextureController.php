@@ -56,11 +56,10 @@ class TextureController extends Controller
  *                     type="string",
  *                     description="Name of the texture"
  *                 ),
- *
  *                 @OA\Property(
  *                      property="status",
  *                      type="string",
- *                      description="status of the texture"
+ *                      description="status of the texture(set '1' or '2')"
  *                 ),
  *                 @OA\Property(
  *                     property="piece_id",
@@ -71,8 +70,29 @@ class TextureController extends Controller
  *                     property="file",
  *                     type="string",
  *                     format="binary",
- *                     description="Image file of the texture"
- *                 )
+ *                     description="Image file of the piece. Only jpg, png, jpeg, gif, svg files are allowed.",
+ *                     pattern="^.+\.(jpg|png|jpeg|gif|svg)$"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="color_name",
+ *                     type="string",
+ *                     description="name of the color"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="color_code",
+ *                     type="string",
+ *                     description="code of the color"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="total_stock",
+ *                     type="number",
+ *                     description="total stock of the texture"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="cost_meter_texture",
+ *                     type="number",
+ *                     description="price meter of texture"
+ *                 ),
  *             )
  *         )
  *     ),
@@ -105,8 +125,11 @@ class TextureController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+        dd($request);
+        $textureStock = $request->total_stock;
 
         $texture = new Texture($request->all());
+        $texture->total_stock = 0;
         $texture->save();
 
         $filePath = null;
@@ -116,6 +139,19 @@ class TextureController extends Controller
             $filePath = $file->storeAs('textures/' . $texture->id, $fileName, 'public');
             $texture->file_path = $filePath;
             $texture->save();
+        }
+
+        $textureStockHistoryController = new TextureStockHistoryController();
+
+        $dataToUpdateTexture = [
+            'amount' => $textureStock,
+            'texture_id' => $texture->id,
+        ];
+
+        $response = $textureStockHistoryController->updateTexture(new Request($dataToUpdateTexture));
+
+        if ($response->getStatusCode()!= 200) {
+            return response()->json(['message' => 'Failed to update texture stock history'], 500);
         }
 
         return response()->json($texture, 201);
@@ -174,7 +210,7 @@ class TextureController extends Controller
  *                     @OA\Property(
  *                         property="status",
  *                         type="string",
- *                         description="Status of the texture"
+ *                         description="Status of the texture(set '1' or '2')"
  *                     ),
  *                     @OA\Property(
  *                         property="file",
@@ -182,7 +218,27 @@ class TextureController extends Controller
  *                         format="binary",
  *                         description="Image file of the piece. Only jpg, png, jpeg, gif, svg files are allowed.",
  *                         pattern="^.+\.(jpg|png|jpeg|gif|svg)$"
- *                     )
+ *                     ),
+ *                    @OA\Property(
+ *                     property="color_name",
+ *                     type="string",
+ *                     description="name of the color"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="color_code",
+ *                     type="string",
+ *                     description="code of the color"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="total_stock",
+ *                     type="number",
+ *                     description="total stock of the texture"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="cost_meter_texture",
+ *                     type="number",
+ *                     description="price meter of texture"
+ *                 ),
  *                 },
  *                 required={"name", "status", "piece_id"}
  *             )
@@ -223,22 +279,43 @@ class TextureController extends Controller
 
         $filePath = $texture->file_path;
 
+        $updatedTotalStock = $request->total_stock;
+        $TextureTotalStock = $texture->total_stock;
+
+        $newStockTexture = $updatedTotalStock - $TextureTotalStock;
+
+        // dd($newStockTexture);
+        // dd($request->total_stock);
+        // dd($TextureTotalStock);
+
         if ($request->hasFile('file')) {
-            // Delete the old file if it exists
             if ($texture->file_path && Storage::disk('public')->exists($texture->file_path)) {
                 Storage::disk('public')->delete($texture->file_path);
             }
 
-            // Store the new file
             $file = $request->file('file');
             $fileName = 'texture-' . $file->getClientOriginalName();
             $filePath = $file->storeAs('textures/' . $texture->id, $fileName, 'public');
         }
-
+        // $texture->total_stock = 0;
         $texture->update(array_merge(
-            $request->except('file'),
+            $request->except(['total_stock', 'file']),
             ['file_path' => $filePath]
         ));
+
+        $textureStockHistoryController = new TextureStockHistoryController();
+
+        $dataToUpdateTexture = [
+            'amount' => $newStockTexture,
+            'texture_id' => $texture->id,
+            'amount_change' => $updatedTotalStock,
+        ];
+
+        $response = $textureStockHistoryController->updateTexture(new Request($dataToUpdateTexture));
+
+        if ($response->getStatusCode()!= 200) {
+            return response()->json(['message' => 'Failed to update texture stock history'], 500);
+        }
 
         return response()->json($texture);
     }
