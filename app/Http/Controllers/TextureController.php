@@ -125,7 +125,7 @@ class TextureController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-        dd($request);
+        // dd($request);
         $textureStock = $request->total_stock;
 
         $texture = new Texture($request->all());
