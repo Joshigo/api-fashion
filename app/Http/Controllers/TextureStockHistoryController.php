@@ -62,7 +62,7 @@ class TextureStockHistoryController extends Controller
 
         $validator = Validator::make($request->all(),[
             'amount' => 'required|numeric',
-            'amount_change' => 'required|numeric',
+            // 'amount_change' => 'required|numeric',
             'texture_id' => 'required|exists:textures,id',
         ]);
 

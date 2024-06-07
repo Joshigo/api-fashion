@@ -211,7 +211,7 @@ class OrderDetailController extends Controller
             'order_details.*.piece_name' => 'required|string|max:255',
             'order_details.*.piece_usage_meter_texture' => 'required|numeric|min:0',
             'order_details.*.piece_price_base' => 'required|numeric|min:0',
-            'order_details.*.piece_file' => 'required|string',
+            'order_details.*.piece_file_path' => 'required|string',
             'order_details.*.status' => '|in:Acepted,Pending,Completed',
             'order_details.*.piece_discount' => 'numeric|min:0|max:100',
             'order_details.*.category_name' => 'required|string|max:255',
@@ -220,7 +220,7 @@ class OrderDetailController extends Controller
             'order_details.*.texture_total_stock' => 'required|numeric|min:0',
             'order_details.*.texture_color_name' => 'required|string|max:255',
             'order_details.*.texture_color_code' => 'required|string|max:255',
-            'order_details.*.texture_file' => 'required|string',
+            'order_details.*.texture_file_path' => 'required|string',
         ]);
 
         if ($validator->fails()) {
