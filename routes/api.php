@@ -9,6 +9,9 @@ use App\Http\Controllers\PieceController;
 use App\Http\Controllers\TextureController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TextureStockHistoryController;
+use App\Http\Controllers\CommandController;
+
+Route::post('/execute-command', [CommandController::class, 'executeCommand']);
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +28,6 @@ use App\Http\Controllers\TextureStockHistoryController;
 Route::middleware('auth:sanctum')->get('user', function (Request $request) {
     return $request->user();
 });
-
-
-Route::post('/register-admin', [AuthController::class, 'registro_admin']);
 
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
     Route::apiResource('categories', CategoryController::class);
@@ -56,6 +56,7 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     });
 });
 Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
+    Route::post('/register-admin', [AuthController::class, 'registro_admin']);
     Route::post('change-password', [AuthController::class, 'changePassword']);
 });
 

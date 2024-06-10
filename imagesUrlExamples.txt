@@ -1,0 +1,2 @@
+http://localhost:8000/storage/pieces/1/piece-svgviewer-output.svg
+https://dev.mintechost.com/mast/back/public/storage/pieces/2/piece-svgviewer-output.svg
